@@ -1,0 +1,19 @@
+.wp-block-cover.has-parallax {
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover !important;
+	background-attachment: fixed !important;
+}
+
+.bg-transparent {
+	background: transparent !important;
+}
+.alignfull {
+	width: 100vw;
+	max-width: 100vw;
+	margin: 0 calc(50% - 50vw);
+}
+.alignwide {
+	width: 100vw;
+	margin: 0 calc(50% - 50vw);
+}

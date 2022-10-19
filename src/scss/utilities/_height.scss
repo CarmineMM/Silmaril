@@ -1,0 +1,17 @@
+@for $h from 1 through 3 {
+    .h-#{$h} {
+        height: #{$h * 0.6}rem;
+    }
+}
+
+@for $h from 4 through 8 {
+    .min-h-#{$h*100} {
+        min-height: #{$h*100}px;
+    }
+}
+
+@for $h from 4 through 8 {
+    .max-h-#{$h*100} {
+        max-height: #{$h*100}px;
+    }
+}

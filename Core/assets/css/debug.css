@@ -1,0 +1,184 @@
+:root {
+    --debug-primary: #0a4b78;
+    --debug-light: #eeeadd;
+    --debug-white: white;
+}
+#debug-console * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+#debug-console {
+    position: fixed;
+    background-color: var(--debug-primary);
+    color: var(--debug-white);
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    font-family: Consolas, Monaco, monospace;
+    padding: 0 1rem;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+#debug-console ol.items-debug-console {
+    margin: 0;
+    list-style: none;
+    display: flex;
+    padding: 0;
+    align-items: center;
+}
+
+#debug-console h2 {
+    font-size: 1.2rem;
+    margin: 0;
+    font-weight: bold;
+}
+
+#debug-console h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+#debug-console button {
+    background-color: transparent;
+    border: none;
+    color: var(--debug-white);
+    padding: 0.5rem 0.7rem;
+    display: flex;
+    align-items: center;
+}
+
+#debug-console button.debug-button:hover,
+#debug-console button.debug-button.active {
+    background-color: #0c5f99;
+}
+
+#debug-console .debug-badge {
+    padding: .1rem .3rem;
+    font-size: .8em;
+    border-radius: .3rem;
+    margin-left: 0.2rem;
+    display: inline-block;
+    background-color: #073554;
+}
+
+#debug-console ol.items-debug-console li:first-of-type {
+    margin-right: 1rem;
+}
+
+#debug-console ol.items-debug-console li:last-of-type {
+    margin-left: auto;
+}
+
+#debug-console button.toggle-debug-console .dashicons-arrow-down-alt2 {
+    display: none;
+}
+
+#debug-console button.toggle-debug-console.open .dashicons-arrow-down-alt2 {
+    display: block;
+}
+
+#debug-console button.toggle-debug-console.open .dashicons-arrow-up-alt2 {
+    display: none;
+}
+
+#debug-console .content-debug-console {
+    border-top: 1px solid var(--debug-light);
+    padding-top: .7rem;
+    padding-bottom: 1rem;
+    display: none;
+    overflow-y: auto;
+    height: 40vh;
+}
+
+#debug-console .content-debug-console::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+#debug-console .content-debug-console::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 0.1rem;
+}
+
+#debug-console .content-debug-console::-webkit-scrollbar-thumb:hover {
+    background: #b3b3b3;
+}
+
+#debug-console .debug-item {
+    display: none;
+}
+
+#debug-console .debug-item.open {
+    display: block;
+}
+
+#debug-console .debug-item h2 {
+    font-size: 1.8rem;
+}
+
+#debug-console .debug-item a {
+    color: whitesmoke;
+    text-decoration: none;
+}
+
+#debug-console .debug-item a:hover {
+    text-decoration: underline;
+}
+
+#debug-console .debug-item p {
+    margin: 0;
+}
+
+#debug-console .debug-item table {
+    display: table;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+#debug-console .debug-item table th div {
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 0.3rem 0;
+}
+
+#debug-console .debug-item table td {
+    font-size: 0.9rem;
+}
+
+#debug-console .debug-item table div {
+    padding: 0.2rem 0;
+}
+
+#debug-console .debug-item table tbody tr:hover {
+    background-color: #0c5284;
+}
+
+#debug-console .debug-item ul {
+    list-style: none;
+    padding: 0;
+}
+
+#debug-console .debug-item ul li {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #bebbb1;
+    padding: .6rem 0;
+}
+
+#debug-console .debug-item ul li.log-info {
+    background-color: #0c5284;
+}
+
+#debug-console .debug-item ul li.log-warning {
+    background-color: #3ab324;
+}
+
+#debug-console .debug-item ul li.log-error {
+    background-color: #cd6c76;
+}
+
+#debug-console .debug-item ul li .dashicons {
+    width: 3rem;
+}

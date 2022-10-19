@@ -1,0 +1,5 @@
+@for $z from 1 through 5 {
+    .z-#{$z*10} {
+        z-index: $z*10;
+    }
+}

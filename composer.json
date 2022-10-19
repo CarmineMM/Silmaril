@@ -1,0 +1,21 @@
+{
+    "name": "carmine/crm",
+    "description": "Creación de Plugins y Temas por Carmine Maggio",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Carmine Maggio",
+            "email": "carminemaggiom@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Silmaril\\": "./"
+        },
+        "files": [
+            "./Core/Support/helpers.php",
+            "./Theme/helpers.php"
+        ]
+    }
+}
