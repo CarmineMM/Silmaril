@@ -43,6 +43,13 @@ class Model
 	private string $query = '';
 
 	/**
+	 * Ocultar ciertos campos
+	 *
+	 * @var bool
+	 */
+	private bool $hiddenColumn = true;
+
+	/**
 	 * Construct
 	 *
 	 * @return void
@@ -93,20 +100,16 @@ class Model
 			$el = (array) $el;
 
 			// Hidden
-			foreach ($hidden as $h) {
-				unset($el[$h]);
+			if ( $this->hiddenColumn ) {
+				foreach ($hidden as $h) {
+					unset($el[$h]);
+				}
 			}
 
 			// Casts
 			foreach ($casts as $key => $cast) {
-				if ( isset($el[$key]) ) {
-					$el[$key] = match ($cast) {
-						'collection' => new Collection(json_decode($el[$key])),
-						'date'       => new \DateTime($el[$key]),
-						'boolean'    => (bool) $el[$key],
-						'object'     => json_decode($el[$key]),
-						default      => $el[$key],
-					};
+				if ( isset($el[$key]) && is_string($cast) ) {
+					$el[$key] = $this->castWithStrings($cast, $el[$key]);
 				}
 			}
 
@@ -117,20 +120,31 @@ class Model
 	}
 
 	/**
+	 * No Ocultar campos
+	 *
+	 * @return $this
+	 */
+	public function noHidden():static
+	{
+		$this->hiddenColumn = false;
+		return $this;
+	}
+
+	/**
 	 * Condiciona
 	 *
 	 * @param $column
 	 * @param $sentenceOrDelimit
-	 * @param $sentence
+	 * @param string $sentence
 	 * @return $this
 	 */
-	public function where($column, $sentenceOrDelimit, $sentence = false): static
+	public function where($column, $sentenceOrDelimit, string $sentence = ''): static
 	{
 		if ( empty($this->query) ) {
 			$this->action();
 		}
 
-		if ( $sentence ) {
+		if ( $sentence !== '' ) {
 			$this->query .= " WHERE {$column} {$sentenceOrDelimit} '{$sentence}'";
 		}
 		else {
@@ -167,6 +181,32 @@ class Model
 	public function first(): Collection
 	{
 		return $this->limit(1)->get()->first();
+	}
+
+	/**
+	 * Cast de valores con casts predeterminados
+	 *
+	 * @param $key
+	 * @param $value
+	 * @return mixed
+	 * @throws \Exception
+	 */
+	private function castWithStrings($key, $value): mixed
+	{
+		$value = match ($key) {
+			'collection' => new Collection(json_decode($value)),
+			'date'       => new \DateTime($value),
+			'boolean'    => (bool) $value,
+			'object'     => json_decode($value),
+			default      => $value,
+		};
+
+		if ( str_contains($key, 'datetime') ) {
+			$key = str_replace('datetime:', '', $key);
+			$value = (new \DateTime($value))->format($key);
+		}
+
+		return $value;
 	}
 
 	/**
