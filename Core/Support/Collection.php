@@ -29,7 +29,7 @@ class Collection
     ) {
         $this->original = $this->el = $this->conditionalArray($this->el);
 
-        if ( $convertAttributes && $this->isAssoc() ) {
+        if ($convertAttributes && $this->isAssoc()) {
             foreach ($this->el as $attribute => $value) {
                 $this->$attribute = $value;
             }
@@ -172,7 +172,7 @@ class Collection
     public function map(callable $call): Collection
     {
         $this->el = $this->conditionalArray(
-            array_map($call, $this->toArray())
+            array_map($call, $this->el)
         );
 
         return $this;
@@ -186,8 +186,8 @@ class Collection
      */
     public function each(callable $call): static
     {
-        foreach ($this->toArray() as $key => $value) {
-            if ( is_array($value) || is_object($value) ) {
+        foreach ($this->el as $key => $value) {
+            if (is_array($value) || is_object($value)) {
                 $call(new static($value), $key);
                 continue;
             }
@@ -388,9 +388,9 @@ class Collection
      *
      * @param callable|null $call
      * @param mixed|null $default
-     * @return mixed
+     * @return null|static
      */
-    public function first(callable $call = null, mixed $default = null): mixed
+    public function first(callable $call = null, mixed $default = null): null|static
     {
         // Primer elemento
         if (is_null($call)) {
@@ -508,7 +508,7 @@ class Collection
     }
 
     /**
-     * Resetea el objeto con el original.
+     * Reset el objeto con el original.
      *
      * @return $this
      */

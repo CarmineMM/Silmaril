@@ -2,3 +2,7 @@ node_modules
 vendor
 style.css.map
 app.js.map
+.idea
+.vscode
+/.idea/
+/.vscode/

@@ -6,7 +6,7 @@
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
- * @package crm
+ * @package Silmaril
  * @author Carmine Maggio <carminemaggiom@gmail.com>
  */
 

@@ -3,7 +3,7 @@
 namespace Silmaril\Core;
 
 /**
- * Respuestas para la API de Wordpress
+ * Respuestas para la API de WordPress
  *
  * @author Carmine Maggio <carminemaggiom@gmail.com>
  */
@@ -26,7 +26,7 @@ final class Response
 	}
 
 	/**
-	 * Respuesta de errores para la API de wordpress
+	 * Respuesta de errores para la API de WordPress
 	 *
 	 * @param $error
 	 * @param int $code

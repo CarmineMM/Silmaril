@@ -30,7 +30,7 @@ export default defineConfig({
 	 *
 	 * @see https://vitejs.dev/config/shared-options.html#root
 	 */
-	root: './src',
+	root: './Theme/src',
 
 	/**
 	 * URL base para ciertos archivos
@@ -71,7 +71,7 @@ export default defineConfig({
 		 */
 		rollupOptions: {
 			input: {
-				main: path.resolve(__dirname, 'src/main.js'),
+				main: path.resolve(__dirname, 'Theme/src/main.js'),
 			},
 			output: {
 				// Nombres estáticos
@@ -119,7 +119,7 @@ export default defineConfig({
 
 		// Requiere cors para hacer visitas desde un .test
 		cors: true,
-		origin: 'https://martaolga.com',
+		origin: '',
 
 		/**
 		 * Server HMR
