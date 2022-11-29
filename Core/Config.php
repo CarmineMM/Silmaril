@@ -4,6 +4,7 @@ namespace Silmaril\Core;
 
 use Silmaril\Core\Support\Configs;
 use Silmaril\Core\Support\Frontend;
+use Silmaril\Core\Cache\Generator;
 
 /**
  * Define las configuraciones
@@ -11,7 +12,7 @@ use Silmaril\Core\Support\Frontend;
  * @author Carmine Maggio <carminemaggiom@gmail.com>
  * @version 1.5.0
  */
-class Config extends Cache
+class Config extends Generator
 {
 	/**
 	 * Carpeta donde están las configuraciones por defecto
@@ -74,6 +75,14 @@ class Config extends Cache
 			$files[] = 'support';
 		}
 
+		if ( $provider->useTaxonomies ) {
+			$files[] = 'taxonomies';
+		}
+
+		if ( $provider->usePostTypes ) {
+			$files[] = 'post_types';
+		}
+
 		Configs::create($this->load(
 			array_unique($files)
 		));
@@ -98,6 +107,30 @@ class Config extends Cache
 					'params'   => 0,
 					'priority' => 10,
 				]
+			]);
+		}
+
+        // Agrega las taxonomies
+        if( $provider->useTaxonomies && !HAS_THEME_CACHE ){
+            Configs::add('actions', [
+                [
+                    'action'   => 'init',
+                    'call'     => [\Silmaril\Core\Contents\Taxonomies::class, 'register'],
+                    'params'   => 0,
+                    'priority' => 8,
+                ],
+            ]);
+        }
+
+		// Agregar post types
+		if ( $provider->usePostTypes && !HAS_THEME_CACHE ) {
+			Configs::add('actions', [
+				[
+					'action'   => 'init',
+					'call'     => [\Silmaril\Core\Contents\PostTypes::class, 'register'],
+					'params'   => 0,
+					'priority' => 9,
+				],
 			]);
 		}
 

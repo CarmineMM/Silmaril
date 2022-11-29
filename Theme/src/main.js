@@ -1,3 +1,5 @@
+window.$ = jQuery
+
 /**
  * Estilos
  */

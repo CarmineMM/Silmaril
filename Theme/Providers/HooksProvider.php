@@ -17,7 +17,7 @@ class HooksProvider
 	 */
 	public static function init(): void
 	{
-		Socials::register();
+        //
 	}
 
 	/**

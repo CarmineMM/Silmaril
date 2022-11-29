@@ -13,6 +13,20 @@ class ConfigProvider extends Config
 	 */
 	protected string $configPath = 'Theme/config';
 
+    /**
+     * Habilitar el uso de post types
+     *
+     * @var bool
+     */
+    protected bool $usePostTypes = true;
+
+    /**
+     * Habilitar el uso de taxonomies
+     *
+     * @var bool
+     */
+    protected bool $useTaxonomies = true;
+
 	/**
 	 * Registrar archivos de configuración
 	 *
@@ -25,6 +39,8 @@ class ConfigProvider extends Config
 			'enqueue',
 			'support',
 			'sidebars',
+            'taxonomies',
+            'post_types',
 		];
 	}
 }

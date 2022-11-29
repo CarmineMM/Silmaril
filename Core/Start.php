@@ -8,6 +8,7 @@ use Silmaril\Core\Support\Configs;
  * Inicializador del tema.
  *
  * @author Carmine Maggio <carminemaggiom@gmail.com>
+ * @version 2.0.0
  */
 final class Start
 {

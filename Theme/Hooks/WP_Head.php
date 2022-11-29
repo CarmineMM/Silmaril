@@ -23,6 +23,7 @@ class WP_Head
 	 */
 	public function insertGoogleFontsApi(): static
 	{
+        echo '<link rel="preconnect" href="https://fonts.googleapis.com">';
 		echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
 		return $this;
 	}

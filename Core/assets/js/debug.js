@@ -23,6 +23,10 @@ jQuery(document).ready(($) => {
         // Toggle para el contenido
         .on('click', '.toggle-debug-console', (e) => {
             openContentDebug();
+        })
+        // Clic en el título
+        .on('click', 'h1', (e) => {
+            openContentDebug();
         });
 
 

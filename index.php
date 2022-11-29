@@ -12,4 +12,6 @@
 
 get_header();
 
+//debug( \Silmaril\Core\Support\Configs::get('taxonomies') );
+
 get_footer();

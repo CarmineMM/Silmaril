@@ -134,6 +134,11 @@ class Collection
     public function add(string $key, mixed $value): static
     {
         $this->el[$key] = $value;
+
+        if ( !isset($this->$key) ) {
+            $this->$key = $value;
+        }
+
         return $this;
     }
 
@@ -188,7 +193,7 @@ class Collection
     {
         foreach ($this->el as $key => $value) {
             if (is_array($value) || is_object($value)) {
-                $call(new static($value), $key);
+                $call(new static($value, false), $key);
                 continue;
             }
             $call($value, $key);

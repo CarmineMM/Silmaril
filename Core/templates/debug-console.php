@@ -10,7 +10,7 @@ $allQueues = Configs::get('all-queues');
 <div id="debug-console">
     <ol class="items-debug-console">
         <li>
-            <h2>Debug Console</h2>
+            <h1>Debug Console</h1>
         </li>
         <li>
             <button class="debug-button" data-debug="log">
@@ -36,6 +36,12 @@ $allQueues = Configs::get('all-queues');
         </li>
         <li>
             <button class="debug-button" data-debug="sidebars">Sidebars</button>
+        </li>
+        <li>
+            <button class="debug-button" data-debug="taxonomies">Taxonomies</button>
+        </li>
+        <li>
+            <button class="debug-button" data-debug="post_types">Post Types</button>
         </li>
         <li>
             <button class="toggle-debug-console">
@@ -71,6 +77,18 @@ $allQueues = Configs::get('all-queues');
                 <tr>
                     <th><div>Supports</div></th>
                     <td><div>Soporte incluido para el tema.</div></td>
+                </tr>
+                <tr>
+                    <th><div>Sidebars</div></th>
+                    <td><div>Contenedor de Widgets o laterales al blog.</div></td>
+                </tr>
+                <tr>
+                    <th><div>Taxonomies</div></th>
+                    <td><div>Categorización o etiquetado de contenido en los post types.</div></td>
+                </tr>
+                <tr>
+                    <th><div>Post Types</div></th>
+                    <td><div>Contenido adicional, estructurado del contenido.</div></td>
                 </tr>
             </table>
         </article>
@@ -324,6 +342,49 @@ $allQueues = Configs::get('all-queues');
                     </tr>
 		        <?php endforeach; ?>
                 </tbody>
+            </table>
+        </article>
+
+        <!-- Taxonomies -->
+        <article class="debug-item" data-item="taxonomies">
+            <table>
+                <thead>
+                    <tr>
+                        <th><div>Name</div></th>
+                        <th><div>Post types</div></th>
+                        <th><div>Names</div></th>
+                        <th><div>Description</div></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach (Configs::get('taxonomies') as $taxonomy): ?>
+                    <tr>
+                        <td>
+                            <div><?= $taxonomy['taxonomy'] ?></div>
+                        </td>
+                        <td>
+                            <div><?= implode(', ', $taxonomy['object_type']) ?></div>
+                        </td>
+                        <td>
+                            <div><?= implode(', ', $taxonomy['names']) ?></div>
+                        </td>
+                        <td>
+                            <div><?= $taxonomy['args']['description'] ?? '...' ?></div>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </article>
+
+        <!-- Post Types -->
+        <article class="debug-item" data-item="post_types">
+            <table>
+                <thead>
+                    <tr>
+
+                    </tr>
+                </thead>
             </table>
         </article>
     </section>

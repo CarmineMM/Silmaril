@@ -1,7 +1,7 @@
 {
   "name": "crm",
   "version": "1.0.0",
-  "description": "Dependencias del tema realizado por Carmine Maggio",
+  "description": "Dependencias del tema Silmaril",
   "scripts": {
     "dev": "vite",
     "build": "vite build"
@@ -14,12 +14,10 @@
   ],
   "author": "Carmine Maggio <carminemaggiom@gmail.com>",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "sass": "^1.54.5",
     "vite": "^3.0.9",
-    "vite-plugin-live-reload": "^3.0.0"
-  },
-  "devDependencies": {
+    "vite-plugin-live-reload": "^3.0.0",
     "vite-plugin-static-copy": "^0.9.0"
   }
 }

@@ -18,7 +18,6 @@ return [
 	| Sera de desarrollo y el segundo el de production',
 	| 'ver' => 'Version',
 	| 'deps' => ['Dependencias', 'marcados por un array'],
-	| 'dev' => false // Solo para desarrollo, por defecto es falso
 	| 'media' => 'Indica en que tamaños se debe ver' Default: 'all'.
 	|
 	| En caso que se quiera incluir de forma forzada un script especifique 'force' => 'css' o 'js'

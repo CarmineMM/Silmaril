@@ -94,7 +94,7 @@ return [
 	 */
 	[
 		'action'   => 'shutdown',
-		'call'     => [\Silmaril\Core\Cache::class, 'createCache'],
+		'call'     => [\Silmaril\Core\Cache\Generator::class, 'createFilesCache' ],
 		'priority' => 100,
 		'args'     => 0,
 	],

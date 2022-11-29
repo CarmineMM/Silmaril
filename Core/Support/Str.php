@@ -141,6 +141,18 @@ class Str
 		return $this;
 	}
 
+    /**
+     * Lleva a slug y devuelve el string
+     *
+     * @param string $separator
+     * @param string $language
+     * @return string
+     */
+    public function toSlug(string $separator = '-', string $language = 'en'): string
+    {
+        return $this->slug($separator, $language)->toString();
+    }
+
 	/**
 	 * Reemplazar un elemento por otro
 	 * 

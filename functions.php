@@ -19,11 +19,11 @@ $startTheme = new \Silmaril\Core\Start();
 // Se plasma una ejecución secuencial del tema.
 $startTheme->run()
 
-	// Widgets o sidebar del sistema
-	->wordpressWidgets()
+    // Widgets o sidebar del sistema
+    ->wordpressWidgets()
 
-	// Acciones de Wordpress registradas
-	->wordpressActions()
+    // Acciones de Wordpress registradas
+    ->wordpressActions()
 
 	// Filtros de wordpress
 	->wordpressFilters();
