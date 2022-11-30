@@ -2,6 +2,7 @@
 
 namespace Silmaril\Core\Cache\Generators;
 
+use Silmaril\Core\Contents\PostTypes;
 use Silmaril\Core\Contents\Taxonomies;
 use Silmaril\Core\Support\Collection;
 
@@ -28,6 +29,13 @@ trait Contents
      */
     protected string $funcTaxonomies = 'register_taxonomies';
 
+	/**
+	 * Nombre de la función de registro de taxonomies
+	 *
+	 * @var string
+	 */
+	protected string $funcPostTypes = 'register_post_types';
+
     /**
      * Nombre de la función en para la carga de scripts y estilos
      *
@@ -36,6 +44,16 @@ trait Contents
     public function getNameFuncTaxonomies(): string
     {
         return TEXT_DOMAIN .'_'. $this->funcTaxonomies;
+    }
+
+    /**
+     * Nombre de la función en para la carga de scripts y estilos
+     *
+     * @return string
+     */
+    public function getNameFuncPostTypes(): string
+    {
+        return TEXT_DOMAIN .'_'. $this->funcPostTypes;
     }
 
     /**
@@ -62,7 +80,7 @@ trait Contents
             $args = $this->createArrayToString($fields->toArray());
             $labels = $this->generateDeps($taxonomy['object_type']);
 
-            $funcTaxonomies .= "\nregister_taxonomy('{$taxonomy['taxonomy']}', {$labels}, $args);";
+            $funcTaxonomies .= "\nregister_taxonomy('{$taxonomy['taxonomy']}', {$labels}, {$args});";
         }
 
         $funcTaxonomies .= "\n}";
@@ -95,4 +113,35 @@ trait Contents
 
         return $return;
     }
+
+	/**
+	 * Crear funciones para los post types
+	 *
+	 * @param array $config
+	 *
+	 * @return string
+	 * @throws \Exception
+	 */
+	protected function createFunctionPostTypes(array $config): string
+	{
+		$funcPostTypes = "\nfunction {$this->getNameFuncPostTypes()}(): void {";
+
+		foreach ($config as $post_type){
+			$contentsPostTypes = new PostTypes();
+
+			$fields = $contentsPostTypes->fields(
+				$post_type['names'],
+				$post_type['labels'] ?? [],
+				$post_type['args'] ?? [],
+				$post_type['gender_name'] ?? '0'
+			);
+
+			$args = $this->createArrayToString($fields->toArray());
+			$funcPostTypes .= "\nregister_post_type('{$post_type['post_type']}', {$args});";
+		}
+
+		$funcPostTypes .= "\n}";
+
+		return $funcPostTypes;
+	}
 }

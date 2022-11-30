@@ -63,7 +63,7 @@ class PostTypes extends Contents
 
             // Etiqueta para indicar todos los elementos en un enlace de submenú.
             // El valor predeterminado es 'Todas las publicaciones' / 'Todas las páginas'.
-            'all_items' => __("Tod{$genderName} l{$genderName}s {$names->plural}", TEXT_DOMAIN),
+            'all_items' => __("Tod{$genderName}s l{$genderName}s {$names->plural}", TEXT_DOMAIN),
 
             // Etiqueta para archivos en menús de navegación. El valor predeterminado es 'Post Archives' / 'Page Archives'.
             'archives' => __("Archivos de {$names->singular}", TEXT_DOMAIN),
@@ -181,7 +181,7 @@ class PostTypes extends Contents
             'show_in_rest' => true,
 
             // Para cambiar la dirección URL base de la ruta de la API de REST. El valor predeterminado es $post_type.
-            'rest_base' => $names->plural,
+            //'rest_base' => $names->plural,
 
             // Para cambiar la dirección URL del espacio de nombres de la ruta de la API de REST. El valor predeterminado es wp/v2.
             'rest_namespace' => ' wp/v2',
@@ -201,7 +201,7 @@ class PostTypes extends Contents
             // La cadena que se va a usar para crear las capacidades de lectura, edición y eliminación.
             // Puede pasarse como una matriz para permitir plurales alternativos cuando se usa este argumento como base para construir las capacidades, por ejemplo,
             // Predeterminado.'story''stories''post'
-            'capability_type' => ['story', 'stories', 'post'],
+            //'capability_type' => ['story', 'stories', 'post'],
 
             // Conjunto de capacidades para este tipo de publicación. $capability_type se utiliza como base para construir capacidades de forma predeterminada.
             // @see https://developer.wordpress.org/reference/functions/get_post_type_capabilities/
@@ -209,7 +209,7 @@ class PostTypes extends Contents
 
             // Si se va a utilizar el control de capabilities predeterminado interno.
             // Valor predeterminado 'false'.
-            'map_meta_cap' => false,
+            //'map_meta_cap' => false,
 
             // Características principales que admite el tipo de publicación. Sirve como alias para llamar aadd_post_type_support()directamente.
             // @see https://developer.wordpress.org/reference/functions/add_post_type_support/
@@ -217,7 +217,7 @@ class PostTypes extends Contents
                 'title',
                 'editor',
                 'comments',
-                'revisions',
+                //'revisions',
                 'trackbacks',
                 'author',
                 'excerpt',
@@ -253,7 +253,7 @@ class PostTypes extends Contents
             // 'query_var' =>
 
             // Si se deben eliminar publicaciones de este tipo al eliminar un usuario.
-            'delete_with_user' => null,
+            //'delete_with_user' => null,
         ], false);
         $fields->combine($arg);
 
@@ -282,12 +282,21 @@ class PostTypes extends Contents
 	 * Registrar los Post Types
 	 *
 	 * @return void
+	 * @throws \Exception
 	 */
 	public static function register(): void
 	{
 		$self = new self;
 
-		// TODO: Seguir con el registro
-		debug(Configs::get('post_types'));
+		foreach (Configs::get('post_types') as $post_type) {
+			$fields = $self->fields(
+				$post_type['names'],
+				$post_type['labels'] ?? [],
+				$post_type['args'] ?? [],
+				$post_type['gender_name'] ?? '0'
+			);
+
+			register_post_type($post_type['post_type'], $fields->toArray());
+		}
 	}
 }

@@ -42,6 +42,7 @@ class Generator
 		'sidebars'   => 'sidebars.php',
 		'support'    => 'support.php',
 		'taxonomies' => 'taxonomies.php',
+		'post_types' => 'post_types.php',
 	];
 
 	/**
@@ -115,6 +116,7 @@ class Generator
 				'filters'    => $self->createActionsAndFiltersContent($config, true),
 				'sidebars'   => $self->createSidebars($config),
                 'taxonomies' => $self->createFunctionTaxonomies($config),
+                'post_types' => $self->createFunctionPostTypes($config),
 				default      => '',
 			};
 
@@ -205,9 +207,14 @@ class Generator
                     $call = $this->getNameFuncScriptsAdmin();
                 }
 
-                // Prevenir guardado de las taxonomies
+                // Guardado de las taxonomies
                 else if ( $call[0] === \Silmaril\Core\Contents\Taxonomies::class && $call[1] === 'register' ) {
                     $call = $this->getNameFuncTaxonomies();
+                }
+
+                // Guardado de los post types
+                else if ( $call[0] === \Silmaril\Core\Contents\PostTypes::class && $call[1] === 'register' ) {
+                    $call = $this->getNameFuncPostTypes();
                 }
 
                 // Carga normal

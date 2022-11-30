@@ -186,7 +186,10 @@ class Taxonomies extends Contents
 
         foreach (Configs::get('taxonomies') as $taxonomy) {
             $fields = $self->fields(
-                $taxonomy['names'], $taxonomy['labels'] ?? [], $taxonomy['args'] ?? [], $taxonomy['gender_name'] ?? 'o'
+				$taxonomy['names'],
+				$taxonomy['labels'] ?? [],
+				$taxonomy['args'] ?? [],
+				$taxonomy['gender_name'] ?? 'o'
             );
 
             register_taxonomy($taxonomy['taxonomy'], $taxonomy['object_type'], $fields->toArray());
