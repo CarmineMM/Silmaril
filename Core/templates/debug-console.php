@@ -382,9 +382,33 @@ $allQueues = Configs::get('all-queues');
             <table>
                 <thead>
                     <tr>
-
+                        <th><div>Post Type</div></th>
+                        <th><div>Names</div></th>
+                        <th><div>Taxonomies</div></th>
+                        <th><div>Description</div></th>
                     </tr>
                 </thead>
+                <tbody>
+                    <?php foreach (Configs::get('post_types') as $post_type): ?>
+                    <tr>
+                        <td>
+                            <div>
+                                <span class="dashicons <?= $post_type['args']['menu_icon'] ?? 'dashicons-dashboard' ?>"></span>
+	                            <?= $post_type['post_type']; ?>
+                            </div>
+                        </td>
+                        <td>
+                            <div><?= implode(', ', $post_type['names']) ?></div>
+                        </td>
+                        <td>
+                            <div><?= implode(', ', $post_type['args']['taxonomies'] ?? []) ?></div>
+                        </td>
+                        <td>
+                            <div><?= $post_type['args']['description'] ?? '...' ?></div>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
             </table>
         </article>
     </section>
