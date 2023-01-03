@@ -5,7 +5,7 @@ namespace Silmaril\Core\Support;
 use Exception;
 
 /**
- * Clase para ayudar en los strings
+ * Clase para ayudar la conversion de los strings
  *
  * @author Carmine Maggio <carminemaggiom@gmail.com>
  * @version 1.0.0
@@ -170,14 +170,43 @@ class Str
 	/**
 	 * Pluralizar una palabra
 	 *
+	 * @param string $lang
+	 *
 	 * @return Str
 	 */
-	public function plural(): Str
+	public function plural(string $lang = 'es'): Str
 	{
-		$this->str = match($this->str) {
-			default => $this->str . 's'
-		};
+		$ending = 's';
 
+		if ( $lang === 'es' ) {
+			$endingWith_ES = [
+				'actor', 'director', 'pais', 'mujer', 'árbol', 'arbol', 'español', 'marsupial',
+				'editor', 'autor', 'color', 'reloj', 'pais', 'país'
+			];
+
+			$endingWith_CES_and_delete_last_character = [
+				'pez', 'automotriz', 'altavoz', 'vez', 'raíz', 'veloz', 'voz', 'interfaz', 'lápiz'
+			];
+
+			$wordsWithoutPlural = [
+				'ciempiés', 'buscapiés', 'salud', 'caos', 'sed', 'víveres', 'enseres', 'honorarios', 'tesis',
+				'caries', 'tórax', 'crisis',
+			];
+
+			if ( in_array(strtolower($this->str), $endingWith_ES) ) {
+				$ending = 'es';
+			}
+			else if ( in_array(strtolower($this->str), $endingWith_CES_and_delete_last_character) ) {
+				$ending = 'ces';
+				$this->str = substr($this->str, 0, -1);
+			}
+			else if( in_array(strtolower($this->str), $wordsWithoutPlural) ) {
+				$ending = '';
+			}
+		}
+
+
+		$this->str = $this->str . $ending;
 		return $this;
 	}
 
@@ -191,6 +220,21 @@ class Str
 	{
 		foreach ($prepend as $p) {
 			$this->str = $p.$this->str;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Agregar una o multiples palabras al final
+	 *
+	 * @param string ...$append
+	 * @return $this
+	 */
+	public function append(string ...$append): Str
+	{
+		foreach ($append as $p) {
+			$this->str .= $p;
 		}
 
 		return $this;

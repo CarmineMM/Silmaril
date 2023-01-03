@@ -89,7 +89,7 @@ class Template
 
 		ob_start();
 		extract($data);
-		require_once $file;
+		include $file;
 		return ob_get_clean();
 	}
 }

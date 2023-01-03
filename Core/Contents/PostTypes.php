@@ -184,7 +184,7 @@ class PostTypes extends Contents
             //'rest_base' => $names->plural,
 
             // Para cambiar la dirección URL del espacio de nombres de la ruta de la API de REST. El valor predeterminado es wp/v2.
-            'rest_namespace' => ' wp/v2',
+            'rest_namespace' => 'wp/v2',
 
             // Nombre de clase del controlador de API de REST. El valor predeterminado es 'WP_REST_Posts_Controller'.
             // @see https://developer.wordpress.org/reference/classes/wp_rest_posts_controller/
@@ -192,7 +192,7 @@ class PostTypes extends Contents
 
             // La posición en el orden del menú debe aparecer el tipo de publicación.
             // Para funcionar, $show_in_menu debe ser true. Valor predeterminado null (en la parte inferior).
-            'menu_position' => 10,
+            'menu_position' => 20,
 
             // La dirección URL del icono que se va a utilizar para este menú. Pase un SVG codificado en base64 usando un URI de datos,
             // que se coloreará para que coincida con el esquema de color, esto debería comenzar con.
@@ -293,7 +293,7 @@ class PostTypes extends Contents
 				$post_type['names'],
 				$post_type['labels'] ?? [],
 				$post_type['args'] ?? [],
-				$post_type['gender_name'] ?? '0'
+				$post_type['gender_name'] ?? 'o'
 			);
 
 			register_post_type($post_type['post_type'], $fields->toArray());

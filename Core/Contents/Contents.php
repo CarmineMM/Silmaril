@@ -27,7 +27,9 @@ class Contents
         if ( !$names->has('plural') ) {
             $names->add(
                 'plural',
-                (new Str($names->get('singular')))->plural()->toString()
+                (new Str($names->get('singular')))
+	                ->plural(get_bloginfo( 'language' ))
+	                ->toString()
             );
         }
 

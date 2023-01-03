@@ -12,6 +12,9 @@ use Silmaril\Core\Support\Configs;
  */
 class PrimaryMenu
 {
+	/**
+	 * Nombre del registro
+	 */
 	const name = 'primary';
 
 	/**

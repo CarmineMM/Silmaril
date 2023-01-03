@@ -77,7 +77,7 @@ class Taxonomies extends Contents
             'public' => true,
 
             // Este argumento define si la taxonomía puede ser consultada de forma pública.
-            'publicly_queryable' => false,
+            'publicly_queryable' => true,
 
             // Gracias a este argumento, puedes indicar si quieres generar una interfaz de usuario por defecto para la taxonomía o no.
             'show_ui' => true,
@@ -93,7 +93,7 @@ class Taxonomies extends Contents
             'show_in_rest' => true,
 
             // Este argumento te permitirá definir la URL base de la REST API para la taxonomía.
-            'rest_base' => (new Str($names->plural))->toSlug(),
+            //'rest_base' => (new Str($names->plural))->toSlug(),
 
             // Con este argumento puedes definir el nombre de la clase para el controlador de la API.
             'rest_controller_class' => '',
@@ -127,7 +127,7 @@ class Taxonomies extends Contents
 
             // Con este argumento podrás definir el formato de la URL de los tipos de contenidos a los que se asigne un elemento de la taxonomía.
             'rewrite' => [
-                'slug' => $names->get('singular')
+                'slug' => (new Str($names->get('singular')))->toSlug(),
             ],
 
             // Gracias a este argumento podrás definir una serie de permisos para la taxonomía.
@@ -192,7 +192,7 @@ class Taxonomies extends Contents
 				$taxonomy['gender_name'] ?? 'o'
             );
 
-            register_taxonomy($taxonomy['taxonomy'], $taxonomy['object_type'], $fields->toArray());
+            register_taxonomy($taxonomy['taxonomy'], $taxonomy['object_type'] ?? [], $fields->toArray());
         }
     }
 }

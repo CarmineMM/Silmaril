@@ -363,7 +363,7 @@ $allQueues = Configs::get('all-queues');
                             <div><?= $taxonomy['taxonomy'] ?></div>
                         </td>
                         <td>
-                            <div><?= implode(', ', $taxonomy['object_type']) ?></div>
+                            <div><?= implode(', ', $taxonomy['object_type'] ?? []) ?></div>
                         </td>
                         <td>
                             <div><?= implode(', ', $taxonomy['names']) ?></div>
@@ -382,7 +382,7 @@ $allQueues = Configs::get('all-queues');
             <table>
                 <thead>
                     <tr>
-                        <th><div>Post Type</div></th>
+                        <th><div style="width: 7rem">Post Type</div></th>
                         <th><div>Names</div></th>
                         <th><div>Taxonomies</div></th>
                         <th><div>Description</div></th>

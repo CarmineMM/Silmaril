@@ -183,17 +183,18 @@ class Collection
         return $this;
     }
 
-    /**
-     * Recorre el objeto actual
-     *
-     * @param callable $call
-     * @return Collection
-     */
-    public function each(callable $call): static
+	/**
+	 * Recorre el objeto actual
+	 *
+	 * @param callable $call
+	 * @param bool $settable
+	 * @return Collection
+	 */
+    public function each(callable $call, bool $settable = false): static
     {
         foreach ($this->el as $key => $value) {
             if (is_array($value) || is_object($value)) {
-                $call(new static($value, false), $key);
+                $call(new static($value, $settable), $key);
                 continue;
             }
             $call($value, $key);
@@ -362,11 +363,11 @@ class Collection
     {
         $get = $this->get($get);
 
-        if ($strict) {
-            return $get === $is;
-        }
+		if ( !is_array($is) ) {
+			$is = [$is];
+		}
 
-        return $get == $is;
+		return in_array($get, $is, $strict);
     }
 
     /**

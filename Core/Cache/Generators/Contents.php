@@ -133,7 +133,7 @@ trait Contents
 				$post_type['names'],
 				$post_type['labels'] ?? [],
 				$post_type['args'] ?? [],
-				$post_type['gender_name'] ?? '0'
+				$post_type['gender_name'] ?? 'o'
 			);
 
 			$args = $this->createArrayToString($fields->toArray());

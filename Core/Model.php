@@ -69,18 +69,26 @@ class Model
 	}
 
 	/**
+	 * Obtiene la tabla del modelo
+	 *
+	 * @return string
+	 */
+	public function getTable(): string
+	{
+		return $this->table;
+	}
+
+	/**
 	 * Devuelve los registros
 	 *
-	 * @param array|null $columns
+	 * @param array|string|null $columns
 	 * @return Collection
 	 */
-	public function all(array $columns = null): Collection
+	public function all(array|string $columns = null): Collection
 	{
-		$select = implode(',', is_null($columns) ? $this->select : $columns);
+		$this->query = "SELECT %COLUMNS% FROM {$this->table}";
 
-		$this->query = "SELECT {$select} FROM {$this->table}";
-
-		return $this->get();
+		return $this->get($columns ?? '');
 	}
 
 	/**
@@ -140,17 +148,53 @@ class Model
 	 */
 	public function where($column, $sentenceOrDelimit, string $sentence = ''): static
 	{
+		$construct = str_contains($this->query, 'WHERE') ? 'AND' : 'WHERE';
+		$this->query .= $this->sentenceConstructor($column, $sentenceOrDelimit, $sentence, $construct);
+
+		return $this;
+	}
+
+	/**
+	 * Constructor de sentencia
+	 *
+	 * @param $column
+	 * @param $sentenceOrDelimit
+	 * @param string $sentence
+	 * @param string $construct
+	 * @return string
+	 */
+	private function sentenceConstructor($column, $sentenceOrDelimit, string $sentence = '', string $construct = 'WHERE'): string
+	{
 		if ( empty($this->query) ) {
 			$this->action();
 		}
 
-		if ( $sentence !== '' ) {
-			$this->query .= " WHERE {$column} {$sentenceOrDelimit} '{$sentence}'";
-		}
-		else {
-			$this->query .= " WHERE {$column} = '{$sentenceOrDelimit}'";
+		if ( !str_contains($column, '.') ) {
+			$column = "{$this->table}.{$column}";
 		}
 
+		if ( $sentence !== '' ) {
+			return " {$construct} {$column} {$sentenceOrDelimit} {$sentence}";
+		}
+
+		return " {$construct} {$column} = '{$sentenceOrDelimit}'";
+	}
+
+	/**
+	 * Sentencia orWhere, pero que agrega un Where al principio si no lo hay
+	 *
+	 * @param $column
+	 * @param $sentenceOrDelimit
+	 * @param string $sentence
+	 * @return $this
+	 */
+	public function orWhere($column, $sentenceOrDelimit, string $sentence = ''): static
+	{
+		if ( !str_contains($this->query, 'WHERE') ) {
+			return $this->where($column, $sentenceOrDelimit, $sentence);
+		}
+
+		$this->query .= $this->sentenceConstructor($column, $sentenceOrDelimit, $sentence, 'OR');
 		return $this;
 	}
 
@@ -198,6 +242,7 @@ class Model
 			'date'       => new \DateTime($value),
 			'boolean'    => (bool) $value,
 			'object'     => json_decode($value),
+			'serialize'  => unserialize($value),
 			default      => $value,
 		};
 
@@ -212,12 +257,20 @@ class Model
 	/**
 	 * Ejecuta la consulta
 	 *
-	 * @param array|null $hidden
+	 * @param array|string $select
 	 * @return Collection
 	 */
-	public function get(array $hidden = null): Collection
+	public function get(array|string $select = ''): Collection
 	{
 		global $wpdb;
+
+		if ( $select !== '' ) {
+			$this->select($select);
+		}
+
+		// Reemplazar estructuras condicionales
+		$this->query = str_replace('%COLUMNS%', implode(', ', $this->select), $this->query);
+		$this->query = str_replace('%JOINS%', '', $this->query);
 
 		if ( WP_DEBUG ) {
 			\Silmaril\Core\Debug::addMessage("Consulta: {$this->query}", 'info');
@@ -229,12 +282,52 @@ class Model
 	/**
 	 * Select
 	 *
-	 * @param array $select
+	 * @param array|string $select
 	 * @return $this
 	 */
-	public function select(array $select): static
+	public function select(array|string $select): static
 	{
+		if ( is_string($select) ){
+			$select = [$select];
+		}
+
 		$this->select = $select;
+
+		return $this;
+	}
+
+	/**
+	 * Ordenar por...
+	 *
+	 * @param string $column
+	 * @param string $order
+	 * @return Model
+	 */
+	public function orderBy(string $column, string $order = 'ASC'): static
+	{
+		$this->query .= " ORDER BY {$column} {$order}";
+
+		return $this;
+	}
+
+	/**
+	 * Inserta un join en la consulta
+	 *
+	 * @param $column
+	 * @param $sentence
+	 * @param string $type
+	 *
+	 * @return $this
+	 */
+	public function join($column, $sentence, string $type = 'INNER'): static
+	{
+		if ( $this->query === '' ) {
+			$this->action();
+		}
+
+		$join = "{$type} JOIN {$column} ON {$sentence}";
+		$this->query = str_replace("%JOINS%", "{$join} %JOINS%", $this->query);
+		return $this;
 	}
 
 	/**
@@ -245,11 +338,10 @@ class Model
 	 */
 	private function action(string $action = 'SELECT'): void
 	{
-		$columns = implode(', ', $this->select);
-		$this->query = "$action $columns";
+		$this->query = "$action %COLUMNS%";
 
 		if ( $action === 'SELECT' || $action === 'select' ) {
-			$this->query .= " FROM {$this->table}";
+			$this->query .= " FROM {$this->table} %JOINS%";
 		}
 	}
 }
