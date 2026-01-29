@@ -17,7 +17,7 @@ get_header();
 ?>
 
 <pre>
-    <?php var_dump(RoadTracer::resumen()); ?>
+    <?php var_dump(theme()->config()); ?>
 </pre>
 
 <?php

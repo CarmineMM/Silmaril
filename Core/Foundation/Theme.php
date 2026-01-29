@@ -128,8 +128,6 @@ class Theme
         if (!\defined('TEXT_DOMAIN')) {
             \define('TEXT_DOMAIN', \wp_get_theme()->get('TextDomain'));
         }
-
-        \load_theme_textdomain(TEXT_DOMAIN, Filesystem::file('app/lang'));
     }
 
     /**
@@ -141,8 +139,6 @@ class Theme
             'theme',
             'providers',
             'assets',
-            // 'post-types',
-            // 'taxonomies',
             'supports',
             'menus',
             'hooks',

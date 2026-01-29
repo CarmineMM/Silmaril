@@ -13,4 +13,9 @@ return [
      * Debug theme
      */
     'debug' => WP_DEBUG,
+
+    /**
+     * Language path
+     */
+    'language_path' => 'App/lang',
 ];
