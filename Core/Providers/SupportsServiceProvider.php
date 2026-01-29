@@ -9,7 +9,7 @@ class SupportsServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        \add_action('after_setup_theme', [self::class, 'addSupports'], 100);
+        \add_action('after_setup_theme', [$this, 'addSupports'], 100);
     }
 
     public function boot(): void {}
@@ -19,9 +19,9 @@ class SupportsServiceProvider extends ServiceProvider
      * 
      * @return void
      */
-    public static function addSupports(): void
+    public function addSupports(): void
     {
-        $supports = Theme::getInstance()->config('supports', []);
+        $supports = $this->theme->config('supports', []);
 
         foreach ($supports as $feature => $args) {
             if ($args === true) {

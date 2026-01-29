@@ -9,14 +9,63 @@ class AssetService extends Service
 {
     public function init(): void
     {
-        $this->frontendStyles();
+        add_action('wp_enqueue_scripts',  [$this, 'registerFrontendAssets'], 100);
+        add_action('admin_enqueue_scripts', [$this, 'registerAdminAssets'], 100);
     }
 
-    private function frontendStyles(): void
+    /**
+     * Register frontend assets
+     * 
+     * @return void
+     */
+    public function registerFrontendAssets(): void
     {
-        foreach ($this->theme->config('assets.frontend.styles') as $key => $value) {
-            // TODO: Seguir aqui
-            // die(var_dump($value));
+        foreach ($this->theme->config('assets.frontend.styles', []) as $handle => $value) {
+            \wp_enqueue_style(
+                handle: $handle,
+                src: $value['src'],
+                deps: $value['deps'] ?? [],
+                ver: $value['ver'] ?? false,
+                media: $value['media'] ?? 'all'
+            );
+        }
+
+        foreach ($this->theme->config('assets.frontend.scripts', []) as $handle => $value) {
+            \wp_enqueue_script(
+                handle: $handle,
+                src: $value['src'],
+                deps: $value['deps'] ?? [],
+                ver: $value['ver'] ?? false,
+                args: $value['args'] ?? false
+            );
+        }
+    }
+
+    /**
+     * Register admin assets
+     * 
+     * @return void
+     */
+    public function registerAdminAssets(): void
+    {
+        foreach ($this->theme->config('assets.admin.styles', []) as $handle => $value) {
+            \wp_enqueue_style(
+                handle: $handle,
+                src: $value['src'],
+                deps: $value['deps'] ?? [],
+                ver: $value['ver'] ?? false,
+                media: $value['media'] ?? 'all'
+            );
+        }
+
+        foreach ($this->theme->config('assets.admin.scripts', []) as $handle => $value) {
+            \wp_enqueue_script(
+                handle: $handle,
+                src: $value['src'],
+                deps: $value['deps'] ?? [],
+                ver: $value['ver'] ?? false,
+                args: $value['args'] ?? false
+            );
         }
     }
 }
