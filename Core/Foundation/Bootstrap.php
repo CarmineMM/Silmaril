@@ -39,6 +39,8 @@ class Bootstrap
     {
         $theme = Theme::getInstance();
 
+        $theme->loadDeferredConfig();
+
         $theme->bootstrap();
 
         RoadTracer::stroke([

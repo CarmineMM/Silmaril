@@ -1,0 +1,22 @@
+<?php
+
+namespace Silmaril\Core\Providers;
+
+use Silmaril\Core\Foundation\ServiceProvider;
+
+class TaxonomyServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        \add_action('init', [$this, 'registerTaxonomies'],  25);
+    }
+
+    public function boot(): void {}
+
+    public function registerTaxonomies(): void
+    {
+        // foreach ($this->theme->config('taxonomies', []) as $taxonomy => $args) {
+        //     die(var_dump($args));
+        // }
+    }
+}

@@ -141,8 +141,8 @@ class Theme
             'theme',
             'providers',
             'assets',
-            'post-types',
-            'taxonomies',
+            // 'post-types',
+            // 'taxonomies',
             'supports',
             'menus',
             'hooks',
@@ -156,6 +156,37 @@ class Theme
                 $this->config[$file] = require_once $filePath;
             }
         }
+    }
+
+    /**
+     * Carga de configuracion diferida
+     * 
+     * @return void
+     */
+    public function loadDeferredConfig(): void
+    {
+        $configFiles = [
+            'post-types',
+            'taxonomies',
+        ];
+
+        foreach ($configFiles as $file) {
+            $filePath = Filesystem::phpFile("{$this->configPath}/{$file}");
+
+            if (\file_exists($filePath)) {
+                $this->config[$file] = require_once $filePath;
+            }
+        }
+
+        RoadTracer::stroke([
+            'file' => Filesystem::phpFile('Core/Foundation/Theme'),
+            'line' => 166,
+            'function' => 'loadDeferredConfig',
+            'class' => Theme::class,
+            'method' => Theme::class . '->loadDeferredConfig()',
+            'object' => Theme::class,
+            'args' => [],
+        ]);
     }
 
     /**
