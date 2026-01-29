@@ -14,7 +14,7 @@
 
 <footer>
     <div class="text-center">
-        Copyright &copy; <span $-text="(new Date()).getFullYear()"></span> <?php bloginfo('site-title') ?></a>
+        Copyright &copy; <?php bloginfo('site-title') ?>
     </div>
 </footer>
 

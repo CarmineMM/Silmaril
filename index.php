@@ -16,9 +16,5 @@ get_header();
 
 ?>
 
-<pre>
-    <?php var_dump(theme()->config()); ?>
-</pre>
-
 <?php
 get_footer();
