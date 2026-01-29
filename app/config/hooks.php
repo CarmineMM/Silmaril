@@ -1,10 +1,12 @@
 <?php
 
+use Silmaril\Core\Hooks\HtmlContentHook;
+
 return [
-    // [
-    //     'hook' => 'init',
-    //     'callback' => fn() => var_dump('probar'),
-    //     'priority' => 10,
-    //     'args' => 1,
-    // ]
+    [
+        'hook' => 'wp_head',
+        'callback' => [HtmlContentHook::class, 'addHeadContent'],
+        'priority' => 1,
+        'args' => 0,
+    ]
 ];

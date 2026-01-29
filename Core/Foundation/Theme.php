@@ -15,6 +15,13 @@ class Theme
     private string $version;
 
     /**
+     * Theme name
+     * 
+     * @var string
+     */
+    const NAME = 'Silmaril';
+
+    /**
      * Instancia única (Singleton)
      */
     private static ?Theme $instance = null;
