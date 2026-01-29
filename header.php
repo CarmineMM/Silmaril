@@ -22,6 +22,7 @@
     <link rel="author" href="<?= get_theme_file_uri('humans.txt') ?>">
     <!-- <meta name="theme-color" content="#ffa100"> -->
 
+
     <?php wp_head() ?>
 </head>
 

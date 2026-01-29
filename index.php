@@ -8,13 +8,8 @@
  * @package Silmaril
  * @author Carmine Maggio <carminemaggiom@gmail.com>
  */
-
-use Silmaril\Core\Foundation\RoadTracer;
-use Silmaril\Core\Foundation\Theme;
-
 get_header();
 
-?>
+the_content();
 
-<?php
 get_footer();
