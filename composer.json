@@ -1,0 +1,24 @@
+{
+    "name": "carminemm/silmaril",
+    "description": "Wordpress Theme",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Carmine Maggio",
+            "email": "carminemaggiom@gmail.com"
+        }
+    ],
+    "require": {
+        "illuminate/collections": "^12.49",
+        "carminemm/units-conversion": "^1.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Silmaril\\": "./"
+        },
+        "files": [
+            "Core/Helpers/functions.php"
+        ]
+    }
+}

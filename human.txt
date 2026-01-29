@@ -1,0 +1,19 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+/* TEAM */
+
+    Name: Carmine Maggio
+    Site: carminemaggiom@gmail.com
+    Location: Spain
+
+/* TECHNOLOGY COLOPHON */
+
+    CSS3, HTML5, PHP, CSS3, JAVASCRIPT
+    WordPress, Vite, Composer, NPM
+
+/* SITE */
+
+    Last update: January 2026
+    Standards: CSS3, HTML5, PHP, CSS3, JAVASCRIPT
+    Components: Apache Server, jQuery, Vite, NPM, Composer
