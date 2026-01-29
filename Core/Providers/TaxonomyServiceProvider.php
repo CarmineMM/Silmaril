@@ -8,7 +8,7 @@ class TaxonomyServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        \add_action('init', [$this, 'registerTaxonomies'],  25);
+        \add_action('init', [$this, 'registerTaxonomies'],  30);
     }
 
     public function boot(): void {}

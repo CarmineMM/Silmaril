@@ -166,7 +166,7 @@ class Theme
     public function loadDeferredConfig(): void
     {
         $configFiles = [
-            'post-types',
+            'post_types',
             'taxonomies',
         ];
 
