@@ -46,7 +46,7 @@ class Theme
      * 
      * @var string
      */
-    private string $configPath = 'app/config';
+    private string $configPath = 'App/config';
 
     /**
      * Constructor privado (Singleton)
