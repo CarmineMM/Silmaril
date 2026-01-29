@@ -139,6 +139,7 @@ class Theme
             'supports',
             'menus',
             'hooks',
+            'filters',
         ];
 
         foreach ($configFiles as $file) {
