@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @see https://developer.wordpress.org/reference/functions/add_theme_support/
+ */
 return [
     /**
      * Título dinámico del sitio.

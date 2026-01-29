@@ -9,6 +9,16 @@
  * @author Carmine Maggio <carminemaggiom@gmail.com>
  */
 
+use Silmaril\Core\Foundation\RoadTracer;
+use Silmaril\Core\Foundation\Theme;
+
 get_header();
 
+?>
+
+<pre>
+    <?php var_dump(RoadTracer::resumen()); ?>
+</pre>
+
+<?php
 get_footer();

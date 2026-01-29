@@ -18,10 +18,10 @@ class Bootstrap
         }
 
         // Inicializar tema después de que WordPress esté listo
-        \add_action('after_setup_theme', [self::class, 'init']);
+        \add_action('after_setup_theme', [self::class, 'init'], 1);
 
         RoadTracer::stroke([
-            'file' => Filesystem::phpFile('Code/Foundation/Bootstrap'),
+            'file' => Filesystem::phpFile('Core/Foundation/Bootstrap'),
             'line' => 10,
             'total_time' => TimeConversion::fromMilliseconds(\microtime(true) - TIMELINE_START),
             'function' => 'run',
