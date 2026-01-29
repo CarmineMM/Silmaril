@@ -15,8 +15,8 @@ class TaxonomyServiceProvider extends ServiceProvider
 
     public function registerTaxonomies(): void
     {
-        // foreach ($this->theme->config('taxonomies', []) as $taxonomy => $args) {
-        //     die(var_dump($args));
-        // }
+        foreach ($this->theme->config('taxonomies', []) as $taxonomy => $values) {
+            \register_taxonomy($taxonomy, $values['object_type'], $values['args']);
+        }
     }
 }
