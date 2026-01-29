@@ -38,6 +38,10 @@ class AssetService extends Service
                 ver: $value['ver'] ?? false,
                 args: $value['args'] ?? false
             );
+
+            foreach ($this->theme->config("assets.localize.$handle", []) as $key => $value) {
+                \wp_localize_script($handle, $key, $value);
+            }
         }
     }
 
@@ -66,6 +70,10 @@ class AssetService extends Service
                 ver: $value['ver'] ?? false,
                 args: $value['args'] ?? false
             );
+
+            foreach ($this->theme->config("assets.localize.$handle", []) as $key => $value) {
+                \wp_localize_script($handle, $key, $value);
+            }
         }
     }
 }

@@ -1,1 +1,1 @@
-console.log('probando');
+console.log('probando', { front_object });

@@ -3,7 +3,7 @@
 return [
     'frontend' => [
         'styles' => [
-            'main' => [
+            'front-css' => [
                 'src' => get_theme_file_uri('app/assets/main.css'),
                 'deps' => [],
                 'ver' => '1.0.0',
@@ -11,12 +11,12 @@ return [
             ],
         ],
         'scripts' => [
-            'main' => [
+            'front-js' => [
                 'src' => get_theme_file_uri('app/assets/main.js'),
-                'deps' => [],
+                'deps' => ['jquery'],
                 'ver' => '1.0.0',
                 'args' => [ // { 'strategy': string, 'in_footer': bool, 'fetchpriority': string }
-                    'in_footer' => true,
+                    // 'in_footer' => true,
                 ],
             ],
         ],
@@ -41,5 +41,14 @@ return [
         //         ],
         //     ],
         // ],
+    ],
+
+    'localize' => [
+        'front-js' => [
+            'front_object' => [
+                'Value 1' => 'Value 1',
+                'Value 2' => 'Value 2',
+            ],
+        ],
     ],
 ];
