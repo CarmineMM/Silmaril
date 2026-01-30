@@ -404,4 +404,14 @@ class Theme
     {
         return $this->services;
     }
+
+    /**
+     * Config path
+     * 
+     * @return string
+     */
+    public function getConfigPath(): string
+    {
+        return $this->configPath;
+    }
 }

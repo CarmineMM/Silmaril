@@ -47,16 +47,30 @@ class Filesystem
      * 
      * @param string $folder
      * @param string $fileExtension
+     * @param bool $relativePath
      * @return bool|string[]
      */
-    public static function getFilesInFolder(string $folder, string $fileExtension = '*'): array
+    public static function getFilesInFolder(string $folder, string $fileExtension = '*', bool $relativePath = true): array
     {
-        $folderPath = static::folder($folder);
+        $folderPath = $relativePath ? static::folder($folder) : $folder;
 
         if ($fileExtension === '*') {
             return \glob("{$folderPath}/*");
         }
 
         return \glob("{$folderPath}/*.{$fileExtension}");
+    }
+
+    /**
+     * Create Folder using wordpress function
+     * 
+     * @param string $folder
+     * @return void
+     */
+    public static function createFolderIfNoExists(string $folder): void
+    {
+        if (!is_dir($folder)) {
+            wp_mkdir_p($folder);
+        }
     }
 }

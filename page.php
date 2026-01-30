@@ -12,5 +12,5 @@
 get_header();
 
 the_content();
-dump(theme()->config());
+
 get_footer();
