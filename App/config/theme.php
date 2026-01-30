@@ -72,12 +72,13 @@ return [
         |
         */
         'categories' => [
-            'disable_for_posts' => true,             // Deshabilitar para posts
-            'remove_admin_menu' => true,             // Remover del menú admin
-            'remove_admin_meta_box' => true,         // Remover meta box
-            'remove_admin_columns' => true,          // Remover columnas
-            'remove_category_feed' => true,          // Remover feed de categorías
-            'remove_category_widgets' => true,       // Remover widgets relacionados
+            'disable_globally' => false,             // Deshabilitar completamente (Todas las features entran en 'true')
+            'disable_for_posts' => false,            // Deshabilitar para posts
+            'remove_admin_menu' => false,            // Remover del menú admin
+            'remove_admin_meta_box' => false,        // Remover meta box
+            'remove_admin_columns' => false,         // Remover columnas
+            'remove_category_feed' => false,         // Remover feed de categorías
+            'remove_category_widgets' => false,      // Remover widgets relacionados
         ],
 
         /*
