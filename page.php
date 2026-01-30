@@ -8,8 +8,13 @@
  * @package Silmaril
  * @author Carmine Maggio <carminemaggiom@gmail.com>
  */
+
+use Silmaril\Core\Foundation\RoadTracer;
+
 get_header();
 
 the_content();
+
+dump(RoadTracer::resumen());
 
 get_footer();

@@ -20,5 +20,8 @@
         "files": [
             "Core/Helpers/functions.php"
         ]
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^8.0"
     }
 }
