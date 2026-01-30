@@ -54,7 +54,7 @@ return [
         */
         'comments' => [
             'disable_globally' => false,              // Deshabilitar completamente (Todas las features entran en 'true')
-            'disable_front_theme' => true,           // Deshabilitar completamente los comentarios (frontend + backend)
+            'disable_front_theme' => false,           // Deshabilitar completamente los comentarios (frontend + backend)
             'remove_admin_menu' => false,             // Remover del menú admin
             'remove_admin_columns' => false,          // Remover columnas al guardar posts
             'remove_admin_support' => false,          // Remover support en post types
