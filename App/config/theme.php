@@ -105,10 +105,10 @@ return [
         |--------------------------------------------------------------------------
         */
         'additional' => [
+            'remove_pingbacks' => false,             // Remover pingbacks
             'remove_author_archives' => false,       // Remover archives de autores
             'remove_date_archives' => false,         // Remover archives por fecha
-            'remove_trackbacks' => true,             // Remover trackbacks
-            'remove_pingbacks' => true,              // Remover pingbacks
+            'remove_trackbacks' => false,            // Remover trackbacks
         ],
     ],
 ];

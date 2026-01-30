@@ -24,7 +24,34 @@ class FeaturesServiceProvider extends ServiceProvider
         if (Arr::some($this->theme->config('theme.features.tags'), fn($value) => (bool) $value)) {
             $this->theme->registerService('feature_tags', new FeatureTagsService($this->theme));
         }
+
+        if ($this->theme->config('theme.features.additional.remove_pingbacks', false)) {
+            \add_filter('xmlrpc_methods', [$this, 'disablePingbacks']);
+            \add_filter('pre_ping', [$this, 'disablePingbackHeader']);
+        }
     }
 
     public function boot(): void {}
+
+    /**
+     * Deshabilitar pingbacks
+     */
+    public function disablePingbacks(array $methods): array
+    {
+        unset($methods['pingback.ping']);
+        unset($methods['pingback.extensions.getPingbacks']);
+        return $methods;
+    }
+
+    /**
+     * Deshabilitar pingback header
+     */
+    public function disablePingbackHeader(array &$links): void
+    {
+        foreach ($links as $key => $link) {
+            if (\strpos($link, 'rel="pingback"') !== false) {
+                unset($links[$key]);
+            }
+        }
+    }
 }
