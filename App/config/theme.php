@@ -110,5 +110,17 @@ return [
             'remove_date_archives' => false,         // Remover archives por fecha
             'remove_trackbacks' => false,            // Remover trackbacks
         ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Additional Cleanups
+        |--------------------------------------------------------------------------
+        */
+        'editor' => [
+            'disabled_gutenberg' => false,          // Deshabilitar Gutenberg globalmente
+            'disabled_gutenberg_for' => [],         // Deshabilitar Gutenberg para post types (Si esta vacio, se desabilita para todos).
+            'disabled_gutenberg_widgets' => false,  // Deshabilitar Gutenberg en widgets
+            'use_classic_editor_plugin' => false   // true = requiere plugin instalado: https://wordpress.org/plugins/classic-editor/
+        ],
     ],
 ];

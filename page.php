@@ -12,5 +12,5 @@
 get_header();
 
 the_content();
-
+dump(roadTracer()->resumen('ServiceProvider'));
 get_footer();

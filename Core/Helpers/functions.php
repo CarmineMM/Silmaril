@@ -1,5 +1,7 @@
 <?php
 
+use Silmaril\Core\Foundation\RoadTracer;
+
 if (!function_exists('theme')) {
     /**
      * Theme options
@@ -43,5 +45,18 @@ if (!function_exists('tags_disabled')) {
     function tags_disabled(): bool
     {
         return false;
+    }
+}
+
+
+if (!function_exists('roadTracer')) {
+    /**
+     * Road tracer
+     * 
+     * @return RoadTracer
+     */
+    function roadTracer(): RoadTracer
+    {
+        return RoadTracer::getInstance();
     }
 }

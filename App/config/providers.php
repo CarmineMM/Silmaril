@@ -8,6 +8,7 @@ return [
         \Silmaril\Core\Providers\SupportsServiceProvider::class,
         \Silmaril\Core\Providers\ThemeServiceProvider::class,
         \Silmaril\Core\Providers\AssetsServiceProvider::class,
+        \Silmaril\Core\Providers\EditorServiceProvider::class,
         \Silmaril\Core\Providers\TaxonomyServiceProvider::class,
         \Silmaril\Core\Providers\PostTypeServiceProvider::class,
         \Silmaril\Core\Providers\FeaturesServiceProvider::class,
