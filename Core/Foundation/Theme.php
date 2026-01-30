@@ -42,6 +42,14 @@ class Theme
     protected array $config = [];
 
     /**
+     * Configuración diferida (Deferred)
+     */
+    private array $deferredConfig = [
+        'post_types',
+        'taxonomies',
+    ];
+
+    /**
      * Path using dot notation
      * 
      * @var string
@@ -134,22 +142,22 @@ class Theme
      */
     private function loadConfiguration(): void
     {
-        $configFiles = [
-            'theme',
-            'providers',
-            'assets',
-            'supports',
-            'menus',
-            'hooks',
-            'filters',
-        ];
+        $files = Filesystem::getFilesInFolder($this->configPath, 'php');
 
-        foreach ($configFiles as $file) {
-            $filePath = Filesystem::phpFile("{$this->configPath}/{$file}");
+        foreach ($files as $filePath) {
+            $fileName = \basename($filePath, '.php');
 
-            if (\file_exists($filePath)) {
-                $this->config[$file] = require_once $filePath;
+            // Ignorar si está en la lista de diferidos
+            if (\in_array($fileName, $this->deferredConfig)) {
+                continue;
             }
+
+            // Ignorar si el nombre del archivo contiene 'deferred'
+            if (\str_contains($fileName, 'deferred')) {
+                continue;
+            }
+
+            $this->config[$fileName] = require_once $filePath;
         }
     }
 
@@ -160,16 +168,24 @@ class Theme
      */
     public function loadDeferredConfig(): void
     {
-        $configFiles = [
-            'post_types',
-            'taxonomies',
-        ];
+        $files = Filesystem::getFilesInFolder($this->configPath, 'php');
 
-        foreach ($configFiles as $file) {
-            $filePath = Filesystem::phpFile("{$this->configPath}/{$file}");
+        foreach ($files as $filePath) {
+            $fileName = \basename($filePath, '.php');
+            $isDeferred = false;
 
-            if (\file_exists($filePath)) {
-                $this->config[$file] = require_once $filePath;
+            // Verificar si está en la lista de diferidos
+            if (\in_array($fileName, $this->deferredConfig)) {
+                $isDeferred = true;
+            }
+
+            // Verificar si el nombre contiene 'deferred'
+            if (\str_contains($fileName, 'deferred')) {
+                $isDeferred = true;
+            }
+
+            if ($isDeferred) {
+                $this->config[$fileName] = require_once $filePath;
             }
         }
 

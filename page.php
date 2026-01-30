@@ -12,5 +12,5 @@
 get_header();
 
 the_content();
-dump(roadTracer()->resumen('ServiceProvider'));
+dump(theme()->config());
 get_footer();
