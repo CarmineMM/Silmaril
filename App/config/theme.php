@@ -53,13 +53,12 @@ return [
         |
         */
         'comments' => [
-            'disable_globally' => false,              // Deshabilitar completamente
-            'disable_on_existing_posts' => false,     // Desactivar en posts existentes
+            'disable_globally' => false,              // Deshabilitar completamente (Todas las features entran en 'true')
+            'disable_front_theme' => false,           // Deshabilitar completamente los comentarios (frontend + backend)
             'remove_admin_menu' => false,             // Remover del menú admin
-            'remove_admin_columns' => false,          // Remover columnas en admin
+            'remove_admin_columns' => false,          // Remover columnas al guardar posts
             'remove_admin_support' => false,          // Remover support en post types
             'remove_discussion_settings' => false,    // Remover settings de discusión
-            'close_existing_comments' => false,       // Cerrar comentarios existentes
             'remove_recent_comments_widget' => false, // Remover widget
             'remove_comment_feed' => false,           // Remover feed de comentarios
         ],

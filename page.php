@@ -15,6 +15,4 @@ get_header();
 
 the_content();
 
-dump(RoadTracer::resumen());
-
 get_footer();
