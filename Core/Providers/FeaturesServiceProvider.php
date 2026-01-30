@@ -25,13 +25,28 @@ class FeaturesServiceProvider extends ServiceProvider
             $this->theme->registerService('feature_tags', new FeatureTagsService($this->theme));
         }
 
+        // Aditional features
+        if ($this->theme->config('theme.features.additional.remove_author_archives', false)) {
+            \add_action('template_redirect', [$this, 'disableAuthorArchives']);
+        }
+
+        if ($this->theme->config('theme.features.additional.remove_date_archives', false)) {
+            \add_action('template_redirect', [$this, 'disableDateArchives']);
+        }
+    }
+
+    public function boot(): void
+    {
         if ($this->theme->config('theme.features.additional.remove_pingbacks', false)) {
             \add_filter('xmlrpc_methods', [$this, 'disablePingbacks']);
             \add_filter('pre_ping', [$this, 'disablePingbackHeader']);
         }
-    }
 
-    public function boot(): void {}
+        if ($this->theme->config('theme.features.additional.remove_trackbacks', false)) {
+            \add_filter('comments_open', [$this, 'disableTrackbacks'], 100, 2);
+            \add_filter('pings_open', '__return_false', 100, 2);
+        }
+    }
 
     /**
      * Deshabilitar pingbacks
@@ -53,5 +68,44 @@ class FeaturesServiceProvider extends ServiceProvider
                 unset($links[$key]);
             }
         }
+    }
+
+    /**
+     * Deshabilitar archives de autores
+     */
+    public function disableAuthorArchives(): void
+    {
+        if (is_author()) {
+            global $wp_query;
+            $wp_query->set_404();
+            \status_header(404);
+            include \get_query_template('404');
+            exit;
+        }
+    }
+
+    /**
+     * Deshabilitar archives por fecha
+     */
+    public function disableDateArchives(): void
+    {
+        if (is_date() || is_year() || is_month() || is_day()) {
+            global $wp_query;
+            $wp_query->set_404();
+            \status_header(404);
+            include \get_query_template('404');
+            exit;
+        }
+    }
+
+    /**
+     * Deshabilitar trackbacks
+     */
+    public function disableTrackbacks(bool $open, int $post_id): bool
+    {
+        if (\get_post_type($post_id) === 'post') {
+            return false;
+        }
+        return $open;
     }
 }
