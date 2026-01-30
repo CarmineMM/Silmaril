@@ -57,7 +57,6 @@ class Theme
         $this->loadThemeFeatures();
         $this->loadConfiguration();
         $this->registerProviders();
-        RoadTracer::getInstance()->themeStrokes();
 
         RoadTracer::stroke([
             'file' => Filesystem::phpFile('Code/Foundation/Theme'),

@@ -61,6 +61,10 @@ class RoadTracer
      */
     public static function resumen(?string $type = null): array
     {
+        if (!WP_DEBUG || (Theme::hasInizialice() && !Theme::getInstance()->config('theme.road_tracer', default: true))) {
+            return [];
+        }
+
         $tracer = self::getInstance()->tracer;
 
         if ($type !== null) {
@@ -113,16 +117,5 @@ class RoadTracer
         }
 
         self::getInstance()->tracer[] = $tracer;
-    }
-
-    /**
-     * Agrega trazos iniciales del tema que se ejecutaron antes de la instancia del road tracer
-     * 
-     * @return void
-     */
-    public function themeStrokes(): void
-    {
-        // Bootstrap
-
     }
 }
