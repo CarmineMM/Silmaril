@@ -58,15 +58,15 @@ class FeatureCommentsService extends Service
     public function removeAdminMenu(): void
     {
         // Remover de post types por defecto
-        remove_post_type_support('post', 'comments');
-        remove_post_type_support('page', 'comments');
-        remove_post_type_support('attachment', 'comments');
+        \remove_post_type_support('post', 'comments');
+        \remove_post_type_support('page', 'comments');
+        \remove_post_type_support('attachment', 'comments');
+        \remove_menu_page('edit-comments.php');
 
         // Remover de custom post types
-        $postTypes = get_post_types();
-        foreach ($postTypes as $postType) {
-            remove_post_type_support($postType, 'comments');
-            remove_post_type_support($postType, 'trackbacks');
+        foreach (\get_post_types() as $postType) {
+            \remove_post_type_support($postType, 'comments');
+            \remove_post_type_support($postType, 'trackbacks');
         }
     }
 
