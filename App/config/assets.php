@@ -43,12 +43,12 @@ return [
         // ],
     ],
 
-    'localize' => [
-        // 'front-js' => [
-        //     'front_object' => [
-        //         'Value 1' => 'Value 1',
-        //         'Value 2' => 'Value 2',
-        //     ],
-        // ],
-    ],
+    // 'localize' => [
+    //     'front-js' => [
+    //         'front_object' => [
+    //             'Value 1' => 'Value 1',
+    //             'Value 2' => 'Value 2',
+    //         ],
+    //     ],
+    // ],
 ];
