@@ -19,6 +19,7 @@ class RoadTracer
     public array $tracer = [
         // [
         //     'file' => '',
+        //     'type' => 'App',
         //     'line' => null,
         //     'function' => null,
         //     'class' => null,
@@ -52,14 +53,30 @@ class RoadTracer
         return $this->tracer;
     }
 
-    public static function resumen(): array
+    /**
+     * Resumen
+     * 
+     * @param string|null $type
+     * @return array
+     */
+    public static function resumen(?string $type = null): array
     {
+        $tracer = self::getInstance()->tracer;
+
+        if ($type !== null) {
+            $tracer = Arr::where(
+                $tracer,
+                fn($tracer) => $tracer['type'] === $type
+            );
+        }
+
         return Arr::map(
-            self::getInstance()->tracer,
+            $tracer,
             fn($tracer) =>
             [
                 'method' => $tracer['method'],
                 'total_time' => $tracer['total_time']->display('ms', 4),
+                'type' => $tracer['type'],
             ]
         );
     }
@@ -70,13 +87,13 @@ class RoadTracer
      * @param array $tracer
      * @return void
      */
-    public static function stroke(array $tracer, $calculateTime = true): void
+    public static function stroke(array $tracer): void
     {
         if (!WP_DEBUG || (Theme::hasInizialice() && !Theme::getInstance()->config('theme.road_tracer', default: true))) {
             return;
         }
 
-        if ($calculateTime && $countTotal = \count(self::getInstance()->tracer)) {
+        if ($countTotal = \count(self::getInstance()->tracer)) {
             $previousTracer = self::getInstance()->tracer[$countTotal - 1];
 
             if (!isset($previousTracer['microtime'])) {
@@ -84,6 +101,15 @@ class RoadTracer
             }
 
             $tracer['total_time'] = TimeConversion::fromMilliseconds(\microtime(true) - $previousTracer['microtime']);
+        }
+
+        if (!isset($tracer['type'])) {
+            $tracer['type'] = match (true) {
+                \str_contains($tracer['class'], 'Provider') => 'ServiceProvider',
+                \str_contains($tracer['class'], 'Service') => 'Service',
+                \str_contains($tracer['class'], 'Foundation') => 'Foundation',
+                default => 'App',
+            };
         }
 
         self::getInstance()->tracer[] = $tracer;
