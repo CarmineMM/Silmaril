@@ -198,6 +198,23 @@ class Theme
     }
 
     /**
+     * Verifica si alguna de las configuraciones es true
+     * 
+     * @param array $keys
+     * @return bool
+     */
+    public function anyConfigIsTrue(array $keys): bool
+    {
+        foreach ($keys as $key) {
+            if ($this->config($key, false)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Registrar providers desde configuración, y los instancia (Ejecuta su __construct)
      */
     private function registerProviders(): void
