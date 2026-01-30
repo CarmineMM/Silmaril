@@ -1,0 +1,17 @@
+:root {
+    /* Luz de los Dos Árboles (Telperion & Laurelin) */
+    --silmaril-light: #E6F0FF;
+    /* Luz plateada de Telperion */
+    --silmaril-gold: #FFF9E6;
+    /* Luz dorada de Laurelin */
+
+    /* Profundidad élfica */
+    --silmaril-sapphire: #4A6CF7;
+    /* Azul de los cielos de Valinor */
+    --silmaril-silver: #CBD5E1;
+    /* Plata de los Noldor */
+
+    /* Oscuridad de Morgoth (contraste) */
+    --silmaril-night: #0F172A;
+    /* Noche antes de las estrellas */
+}
