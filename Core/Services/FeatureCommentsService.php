@@ -104,6 +104,7 @@ class FeatureCommentsService extends Service
     public function removeDiscussionSettings(): void
     {
         \remove_submenu_page('options-general.php', 'options-discussion.php');
+        \remove_submenu_page('edit-comments.php', 'edit-comments.php');
     }
 
     /**
