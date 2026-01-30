@@ -2,7 +2,6 @@
 
 namespace Silmaril\Core\Services;
 
-use Silmaril\Core\Contents\AssetsContent;
 use Silmaril\Core\Foundation\Service;
 
 class AssetService extends Service
