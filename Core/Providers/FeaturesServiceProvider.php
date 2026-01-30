@@ -4,7 +4,7 @@ namespace Silmaril\Core\Providers;
 
 use Illuminate\Support\Arr;
 use Silmaril\Core\Foundation\ServiceProvider;
-use Silmaril\Core\Services\{FeatureCommentsService, FeatureCategoriesService};
+use Silmaril\Core\Services\{FeatureCommentsService, FeatureCategoriesService, FeatureTagsService};
 
 class FeaturesServiceProvider extends ServiceProvider
 {
@@ -18,6 +18,11 @@ class FeaturesServiceProvider extends ServiceProvider
         // Features de categorias
         if (Arr::some($this->theme->config('theme.features.categories'), fn($value) => (bool) $value)) {
             $this->theme->registerService('feature_categories', new FeatureCategoriesService($this->theme));
+        }
+
+        // Features de tags
+        if (Arr::some($this->theme->config('theme.features.tags'), fn($value) => (bool) $value)) {
+            $this->theme->registerService('feature_tags', new FeatureTagsService($this->theme));
         }
     }
 

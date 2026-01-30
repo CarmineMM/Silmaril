@@ -12,40 +12,40 @@ class FeatureCommentsService extends Service
 
         // Features individuales
         if ($this->theme->config('theme.features.comments.disable_front_theme', false) || $disabledAllFeatures) {
-            \add_filter('comments_open', '__return_false', 20, 2);
-            \add_filter('pings_open', '__return_false', 20, 2);
-            \add_filter('comments_array', '__return_empty_array', 20, 2);
+            \add_filter('comments_open', '__return_false', 200, 2);
+            \add_filter('pings_open', '__return_false', 201, 2);
+            \add_filter('comments_array', '__return_empty_array', 202, 2);
 
             // Remover CSS de comentarios del frontend
-            \add_action('wp_print_styles', [$this, 'deregisterCommentStyles'], 100);
+            \add_action('wp_print_styles', [$this, 'deregisterCommentStyles'], 200);
 
             // Remover scripts de comentarios
-            \add_action('wp_print_scripts', [$this, 'dequeueCommentScripts'], 100);
+            \add_action('wp_print_scripts', [$this, 'dequeueCommentScripts'], 201);
         }
 
         if ($this->theme->config('theme.features.comments.remove_admin_menu', false) || $disabledAllFeatures) {
-            \add_action('admin_init', [$this, 'removeAdminMenu']);
+            \add_action('admin_init', [$this, 'removeAdminMenu'], 202);
         }
 
         if ($this->theme->config('theme.features.comments.remove_admin_columns', false) || $disabledAllFeatures) {
-            \add_filter('manage_posts_columns', [$this, 'removeCommentsColumns']);
-            \add_filter('manage_pages_columns', [$this, 'removeCommentsColumns']);
+            \add_filter('manage_posts_columns', [$this, 'removeCommentsColumns'], 204);
+            \add_filter('manage_pages_columns', [$this, 'removeCommentsColumns'], 205);
         }
 
         if ($this->theme->config('theme.features.comments.remove_admin_support', false) || $disabledAllFeatures) {
-            \add_action('admin_init', [$this, 'removeCommentsSupport']);
+            \add_action('admin_init', [$this, 'removeCommentsSupport'], 203);
         }
 
         if ($this->theme->config('theme.features.comments.remove_discussion_settings', false) || $disabledAllFeatures) {
-            \add_action('admin_menu', [$this, 'removeDiscussionSettings']);
+            \add_action('admin_menu', [$this, 'removeDiscussionSettings'], 204);
         }
 
         if ($this->theme->config('theme.features.comments.remove_recent_comments_widget', false) || $disabledAllFeatures) {
-            \add_action('widgets_init', [$this, 'unregisterCommentsWidgets']);
+            \add_action('widgets_init', [$this, 'unregisterCommentsWidgets'], 205);
         }
 
         if ($this->theme->config('theme.features.comments.remove_comment_feed', false) || $disabledAllFeatures) {
-            \add_filter('feed_links_show_comments_feed', '__return_false');
+            \add_filter('feed_links_show_comments_feed', '__return_false', 206);
             \remove_action('wp_head', 'feed_links_extra', 3);
         }
     }

@@ -11,27 +11,27 @@ class FeatureCategoriesService extends Service
         $disabledAllFeatures = $this->theme->config('theme.features.categories.disable_globally', false);
 
         if ($this->theme->config('theme.features.categories.disable_for_posts', false) || $disabledAllFeatures) {
-            \add_action('init', [$this, 'unregisterPostCategories']);
+            \add_action('init', [$this, 'unregisterPostCategories'], 300);
         }
 
         if ($this->theme->config('theme.features.categories.remove_admin_menu', false) || $disabledAllFeatures) {
-            \add_action('admin_menu', [$this, 'removeCategoriesMenu']);
+            \add_action('admin_menu', [$this, 'removeCategoriesMenu'], 301);
         }
 
         if ($this->theme->config('theme.features.categories.remove_admin_meta_box', false) || $disabledAllFeatures) {
-            \add_action('admin_menu', [$this, 'removeCategoriesMetaBox']);
+            \add_action('admin_menu', [$this, 'removeCategoriesMetaBox'], 302);
         }
 
         if ($this->theme->config('theme.features.categories.remove_admin_columns', false) || $disabledAllFeatures) {
-            \add_action('admin_menu', [$this, 'removeCategoriesColumns']);
+            \add_action('admin_menu', [$this, 'removeCategoriesColumns'], 303);
         }
 
         if ($this->theme->config('theme.features.categories.remove_category_feed', false) || $disabledAllFeatures) {
-            \add_filter('category_feed', '__return_false');
+            \add_filter('category_feed', '__return_false', 300);
         }
 
         if ($this->theme->config('theme.features.categories.remove_category_widgets', false) || $disabledAllFeatures) {
-            \add_action('widgets_init', [$this, 'unregisterCategoryWidgets']);
+            \add_action('widgets_init', [$this, 'unregisterCategoryWidgets'], 304);
         }
     }
 
