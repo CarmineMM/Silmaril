@@ -10,8 +10,9 @@
         }
     ],
     "require": {
-        "illuminate/collections": "^12.49",
-        "carminemm/units-conversion": "^1.2"
+        "php": "^8.4",
+        "carminemm/units-conversion": "^1.2",
+        "illuminate/support": "^12.49"
     },
     "autoload": {
         "psr-4": {

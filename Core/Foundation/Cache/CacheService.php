@@ -4,6 +4,7 @@ namespace Silmaril\Core\Foundation\Cache;
 
 use Exception;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Silmaril\Core\Foundation\RoadTracer;
 use Silmaril\Core\Foundation\Theme;
 use Silmaril\Core\Helpers\Filesystem;
@@ -145,7 +146,6 @@ class CacheService
     {
         $results = [];
         $components = Arr::get($this->config, 'components', []);
-        dd($components);
 
         foreach ($components as $component => $enabled) {
             if ($enabled) {
@@ -166,6 +166,7 @@ class CacheService
     {
         foreach ($this->namesGenerator($component) as $componentClass) {
             $generatorClass = $componentClass;
+            dd($generatorClass);
 
             if (!\class_exists($generatorClass)) {
                 continue;
@@ -182,7 +183,10 @@ class CacheService
     private function namesGenerator(string $component): array
     {
         return \array_map(
-            fn($generator) =>  str_replace('{component}', $component, $generator),
+            fn($generator) => Str::of($generator)
+                ->replace('{component}', $component)
+                ->title()
+                ->toString(),
             $this->config['namespace_cache_genetors']
         );
     }
