@@ -2,6 +2,7 @@
 
 namespace Silmaril\Core\Foundation\Cache;
 
+use Illuminate\Support\Arr;
 use Silmaril\Core\Helpers\Filesystem;
 
 class ConfigCacheGenerator extends CacheGenerator
@@ -21,7 +22,7 @@ class ConfigCacheGenerator extends CacheGenerator
             $filename = basename($file, '.php');
             $configData = require $file;
 
-            $cacheContent .= "    '{$filename}' => " . $this->formatArrayAsPhp($configData, 1) . ",\n\n";
+            $cacheContent .= "    '{$filename}' => " . $this->formatArrayAsPhp($configData) . ",\n\n";
         }
 
         $cacheContent .= "];\n";

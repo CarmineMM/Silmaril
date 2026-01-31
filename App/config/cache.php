@@ -76,11 +76,11 @@ return [
     |
     | Clave única para invalidar cache (cambiar para forzar regeneración).
     | Cambiar {component} por el nombre del compoente de la lista.
-    | Ej. component = post_types Genera Silmaril\\Core\\Cache\\PostTypesCacheGenerator
-    | Ej. component = taxonomies Genera Silmaril\\Core\\Cache\\TaxonomiesCacheGenerator
+    | Ej. component = post_types Genera Silmaril\\Core\\Foundation\\Cache\\PostTypesCacheGenerator
+    | Ej. component = taxonomies Genera Silmaril\\Core\\Foundation\\Cache\\TaxonomiesCacheGenerator
     |
     */
     'namespace_cache_genetors' => [
-        'Silmaril\\Core\\Cache\\{component}CacheGenerator',
+        'Silmaril\\Core\\Foundation\\Cache\\{component}CacheGenerator',
     ],
 ];

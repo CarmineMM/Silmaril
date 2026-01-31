@@ -165,14 +165,11 @@ class CacheService
     public function generateComponent(string $component): bool
     {
         foreach ($this->namesGenerator($component) as $componentClass) {
-            $generatorClass = $componentClass;
-            dd($generatorClass);
-
-            if (!\class_exists($generatorClass)) {
+            if (!\class_exists($componentClass)) {
                 continue;
             }
 
-            $generator = new $generatorClass($this->theme);
+            $generator = new $componentClass($this->theme);
 
             return $generator->generate();
         }
@@ -182,11 +179,14 @@ class CacheService
 
     private function namesGenerator(string $component): array
     {
+        $component = Str::of($component)
+            ->replace(['_', '-'], ' ')
+            ->title()
+            ->replace(' ', '')
+            ->toString();
+
         return \array_map(
-            fn($generator) => Str::of($generator)
-                ->replace('{component}', $component)
-                ->title()
-                ->toString(),
+            fn($generator) => \str_replace('{component}', $component, $generator),
             $this->config['namespace_cache_genetors']
         );
     }

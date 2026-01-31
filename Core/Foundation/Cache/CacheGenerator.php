@@ -38,6 +38,7 @@ abstract class CacheGenerator
     {
         $cacheFile = $this->cacheService->getCacheFilePath($component);
 
+
         // Añadir header PHP y timestamp
         $header = "<?php\n";
         $header .= "/**\n";
@@ -48,7 +49,7 @@ abstract class CacheGenerator
 
         $content = $header . $content;
 
-        return file_put_contents($cacheFile, $content) !== false;
+        return \file_put_contents($cacheFile, $content) !== false;
     }
 
     /**

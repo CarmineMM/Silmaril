@@ -10,9 +10,14 @@
         }
     ],
     "require": {
-        "php": "^8.4",
+        "php": "^8.3",
         "carminemm/units-conversion": "^1.2",
-        "illuminate/support": "^12.49"
+        "illuminate/support": "^12.0"
+    },
+    "config": {
+        "platform": {
+            "php": "8.3"
+        }
     },
     "autoload": {
         "psr-4": {
@@ -23,6 +28,6 @@
         ]
     },
     "require-dev": {
-        "symfony/var-dumper": "^8.0"
+        "symfony/var-dumper": "^7.0"
     }
 }
