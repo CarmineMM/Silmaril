@@ -10,7 +10,7 @@ return [
     | en producción (cuando WP_DEBUG es false)
     |
     */
-    'enabled' => true,
+    'enabled' => !WP_DEBUG,
 
     /*
     |--------------------------------------------------------------------------

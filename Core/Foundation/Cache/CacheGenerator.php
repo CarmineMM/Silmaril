@@ -2,29 +2,12 @@
 
 namespace Silmaril\Core\Foundation\Cache;
 
-use Silmaril\Core\Foundation\Theme;
-
 abstract class CacheGenerator
 {
     /**
-     * Instancia del tema
-     */
-    protected Theme $theme;
-
-    /**
-     * Cache service
-     */
-    protected CacheService $cacheService;
-
-    /**
      * Constructor
      */
-    public function __construct(Theme $theme)
-    {
-        $this->theme = $theme;
-
-        $this->cacheService = new CacheService($theme);
-    }
+    public function __construct(public CacheService $cacheService) {}
 
     /**
      * Generar cache
@@ -42,7 +25,7 @@ abstract class CacheGenerator
         // Añadir header PHP y timestamp
         $header = "<?php\n";
         $header .= "/**\n";
-        $header .= " * Cache File - {$component} - Silmaril {$this->theme->getVersion()}\n";
+        $header .= " * Cache File - {$component} - Silmaril {$this->cacheService->theme->getVersion()}\n";
         $header .= " * Generated: " . date('Y-m-d H:i:s') . "\n";
         $header .= " * DO NOT EDIT - This file is auto-generated\n";
         $header .= " */\n\n";

@@ -4,6 +4,7 @@ namespace Silmaril\Core\Foundation;
 
 use Exception;
 use Illuminate\Support\Arr;
+use Silmaril\Core\Exceptions\ServiceProviderNotFound;
 use Silmaril\Core\Foundation\Cache\CacheService;
 use Silmaril\Core\Foundation\RoadTracer;
 use Silmaril\Core\Helpers\Filesystem;
@@ -13,7 +14,7 @@ class Theme
     /**
      * Versión del tema
      */
-    private string $version;
+    protected string $version = '1.0.0';
 
     /**
      * Theme name
@@ -127,7 +128,7 @@ class Theme
      * 
      * @return string
      */
-    public static function getVersion(): string
+    public function getVersion(): string
     {
         return self::getInstance()->version;
     }
@@ -153,8 +154,9 @@ class Theme
      */
     private function loadConfiguration(): void
     {
-        if ($this->cacheService && $this->cacheService->isEnabled()) {
-            dd('Seguir aqui cuando sea necesario: loadConfiguration');
+        if ($this->cacheService !== null && $this->cacheService->isEnabled()) {
+            $this->config = $this->cacheService->getConfig();
+            return;
         }
 
         $files = Filesystem::getFilesInFolder($this->configPath, 'php');
@@ -184,7 +186,7 @@ class Theme
     public function loadDeferredConfig(): void
     {
         if ($this->cacheService->isEnabled()) {
-            dd('Seguir aqui cuando sea necesario: loadDeferredConfig');
+            return;
         }
 
         $files = Filesystem::getFilesInFolder($this->configPath, 'php');
@@ -254,7 +256,8 @@ class Theme
     private function registerProviders(): void
     {
         if ($this->cacheService->isEnabled()) {
-            dd('Seguir aqui cuando sea necesario: registerProviders');
+            $this->providers = $this->cacheService->getConfig('providers.auto');
+            return;
         }
 
         $providersConfig = $this->config('providers', []);
@@ -262,16 +265,15 @@ class Theme
         if (isset($providersConfig['auto'])) {
             $this->providers = Arr::map($providersConfig['auto'], function ($provider) {
                 if (!\class_exists($provider)) {
-                    throw new Exception("Provider {$provider} not found");
+                    throw new ServiceProviderNotFound("Service Provider {$provider} not found");
                 }
 
-                return new $provider($this);
+                return $provider;
             });
         }
 
         if (isset($providersConfig['deferred'])) {
             // Providers diferidos se cargarán bajo demanda
-
         }
     }
 
@@ -280,16 +282,6 @@ class Theme
      */
     public function bootstrap(): void
     {
-        // Re-cargar configuración de cache
-        if (!$this->cacheService->isEnabled()) {
-            $this->cacheService->loadConfig();
-        }
-
-        // Cargar cache en caso de existir
-        if ($this->cacheService->isEnabled()) {
-            $this->cacheService->generateAll();
-        }
-
         // Init Providers
         $this->instanceRegisterProviders();
 
@@ -298,6 +290,13 @@ class Theme
 
         // Boot the providers
         $this->bootProviders();
+
+        // Cargar cache en caso de existir
+        if ($this->cacheService->requireGenerate() && $this->config('cache.enabled')) {
+            $this->cacheService->loadConfig();
+            $this->cacheService->generateAll();
+            $this->cacheService->updateDBCachePath();
+        }
 
         RoadTracer::stroke([
             'file' => Filesystem::phpFile('Core/Foundation/Theme'),
@@ -331,16 +330,18 @@ class Theme
      */
     public function instanceRegisterProviders(): void
     {
-        foreach ($this->providers as $providerClass) {
-            $providerClass->register();
+        foreach ($this->providers as $key => $providerClass) {
+            $this->providers[$key] = new $providerClass($this);
+
+            $this->providers[$key]->register();
 
             RoadTracer::stroke([
                 'file' => Filesystem::phpFile('Core/Foundation/Theme'),
                 'line' => 192,
                 'function' => 'register',
-                'class' => $providerClass::class,
-                'method' => $providerClass::class . '->register()',
-                'object' => $providerClass::class,
+                'class' => $this->providers[$key]::class,
+                'method' => $this->providers[$key]::class . '->register()',
+                'object' => $this->providers[$key]::class,
                 'args' => [],
             ]);
         }

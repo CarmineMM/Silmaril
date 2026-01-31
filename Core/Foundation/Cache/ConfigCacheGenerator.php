@@ -12,7 +12,8 @@ class ConfigCacheGenerator extends CacheGenerator
      */
     public function generate(): bool
     {
-        $configFiles = Filesystem::getFilesInFolder($this->theme->getConfigPath(), 'php');
+        $configFiles = Filesystem::getFilesInFolder($this->cacheService->theme->getConfigPath(), 'php');
+
 
         $cacheContent = "// Config Cache\n";
         $cacheContent .= "// All configuration files combined\n\n";

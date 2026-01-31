@@ -24,7 +24,22 @@ class CacheService
     /**
      * Manifest file
      */
-    protected string $manifestFile;
+    protected ?string $manifestFile = null;
+
+    /**
+     * Cache Folder
+     */
+    private ?string $dbCachePath = null;
+
+    /**
+     * Indica si el cache debe regenerarse
+     */
+    private bool $mustRegenerate = true;
+
+    /**
+     * Cache path key
+     */
+    private string $dbCachePathKey = '{theme_name}_{theme_version}_cache_path';
 
     /**
      * Constructor
@@ -32,8 +47,11 @@ class CacheService
     public function __construct(
         public Theme &$theme
     ) {
-        // TODO: Si o si hay que consultar la base de datos
-        $this->loadConfig();
+        $this->getCacheFolder();
+
+        if ($this->dbCachePath !== null) {
+            $this->loadConfig();
+        }
 
         RoadTracer::stroke([
             'file' => Filesystem::phpFile('Core/Foundation/Cache/CacheService'),
@@ -47,13 +65,25 @@ class CacheService
     }
 
     /**
+     * Obtiene el db path key
+     */
+    public function getDBCachePathKey(): string
+    {
+        return str_replace(
+            ['{theme_name}', '{theme_version}', '.'],
+            [Theme::NAME, \wp_get_theme()->get('Version'), '_'],
+            $this->dbCachePathKey
+        );
+    }
+
+    /**
      * Get config value
      * 
      * @param string $key
      * @param mixed $default
      * @return mixed
      */
-    public function config(?string $key = null, mixed $default = null): mixed
+    public function getConfig(?string $key = null, mixed $default = null): mixed
     {
         if ($key === null) {
             return $this->config;
@@ -63,16 +93,25 @@ class CacheService
     }
 
     /**
+     * Obtiene el folder de la cache directamente de la base de datos
+     * 
+     * @return string
+     */
+    public function getCacheFolder(): ?string
+    {
+        return $this->dbCachePath = get_option($this->getDBCachePathKey(), null);
+    }
+
+    /**
      * Reload config
      */
     public function loadConfig(): void
     {
-        $this->config = $this->theme->config('cache', []);
-        $this->cachePath ??= $this->config['path'] ?? Filesystem::folder('bootstrap/cache');
+        $this->cachePath ??= $this->getConfig('cache.path') ?? $this->dbCachePath;
+        $this->config = $this->loadCache('config', []);
         $this->manifestFile = $this->cachePath . DIRECTORY_SEPARATOR . 'manifest.json';
 
-        // Crear directorio de cache si no existe
-        if ($this->config('enabled', false)) {
+        if ($this->getConfig('cache.enabled', false)) {
             Filesystem::createFolderIfNoExists($this->cachePath);
         }
     }
@@ -82,7 +121,7 @@ class CacheService
      */
     public function isEnabled(): bool
     {
-        return $this->config('enabled', false);
+        return $this->getConfig('cache.enabled', false);
     }
 
     /**
@@ -129,12 +168,12 @@ class CacheService
     /**
      * Cargar cache para un componente
      */
-    public function loadCache(string $component): mixed
+    public function loadCache(string $component, mixed $default = null): mixed
     {
         $cacheFile = $this->getCacheFilePath($component);
 
         if (!\file_exists($cacheFile)) {
-            return null;
+            return $default;
         }
 
         return require $cacheFile;
@@ -160,6 +199,13 @@ class CacheService
         return $results;
     }
 
+    public function updateDBCachePath(): void
+    {
+        if ($this->cachePath !== null) {
+            \update_option($this->getDBCachePathKey(), $this->cachePath);
+        }
+    }
+
     /**
      * Generar cache para un componente específico
      */
@@ -170,7 +216,7 @@ class CacheService
                 continue;
             }
 
-            $generator = new $componentClass($this->theme);
+            $generator = new $componentClass($this);
 
             return $generator->generate();
         }
@@ -258,6 +304,16 @@ class CacheService
         // }
 
         return true;
+    }
+
+    /**
+     * Requiere generar
+     * 
+     * @return bool
+     */
+    public function requireGenerate(): bool
+    {
+        return $this->manifestFile === null;
     }
 
     /**
