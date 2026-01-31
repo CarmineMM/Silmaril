@@ -24,7 +24,8 @@ class FeatureCommentsService extends Service
         }
 
         if ($this->theme->config('theme.features.comments.remove_admin_menu', false) || $disabledAllFeatures) {
-            \add_action('admin_init', [$this, 'removeAdminMenu'], 202);
+            \add_action('admin_menu', [$this, 'removeAdminMenu'], 202);
+            \add_action('admin_init', [$this, 'removeAdminCommentsSupport'], 203);
         }
 
         if ($this->theme->config('theme.features.comments.remove_admin_columns', false) || $disabledAllFeatures) {
@@ -57,13 +58,22 @@ class FeatureCommentsService extends Service
      */
     public function removeAdminMenu(): void
     {
-        // Remover de post types por defecto
+        \remove_menu_page('edit-comments.php');
+    }
+
+    /**
+     * Remove support for comments in admin
+     * 
+     * @return void
+     */
+    public function removeAdminCommentsSupport(): void
+    {
+        // Remover de post types por defecto (Legacy support)
         \remove_post_type_support('post', 'comments');
         \remove_post_type_support('page', 'comments');
         \remove_post_type_support('attachment', 'comments');
-        \remove_menu_page('edit-comments.php');
 
-        // Remover de custom post types
+        // Remover de todos los post types registrados
         foreach (\get_post_types() as $postType) {
             \remove_post_type_support($postType, 'comments');
             \remove_post_type_support($postType, 'trackbacks');
