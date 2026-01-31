@@ -2,6 +2,7 @@
 
 namespace Silmaril\Core\Foundation\Cache;
 
+use Exception;
 use Illuminate\Support\Arr;
 use Silmaril\Core\Foundation\RoadTracer;
 use Silmaril\Core\Foundation\Theme;
@@ -65,16 +66,13 @@ class CacheService
     public function loadConfig(): void
     {
         $this->config = $this->theme->config('cache', []);
-
-        if (!$this->config('enabled', false)) {
-            return;
-        }
-
         $this->cachePath = $this->config['path'] ?? Filesystem::folder('bootstrap/cache');
         $this->manifestFile = $this->cachePath . DIRECTORY_SEPARATOR . 'manifest';
 
         // Crear directorio de cache si no existe
-        Filesystem::createFolderIfNoExists($this->cachePath);
+        if ($this->config('enabled', false)) {
+            Filesystem::createFolderIfNoExists($this->cachePath);
+        }
     }
 
     /**
@@ -147,6 +145,7 @@ class CacheService
     {
         $results = [];
         $components = Arr::get($this->config, 'components', []);
+        dd($components);
 
         foreach ($components as $component => $enabled) {
             if ($enabled) {

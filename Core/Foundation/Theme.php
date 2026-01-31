@@ -282,10 +282,15 @@ class Theme
      */
     public function bootstrap(): void
     {
+        // Re-cargar configuración de cache
         if (!$this->cacheService->isEnabled()) {
             $this->cacheService->loadConfig();
         }
-        dd($this->cacheService->config());
+
+        // Cargar cache en caso de existir
+        if ($this->cacheService->isEnabled()) {
+            $this->cacheService->generateAll();
+        }
 
         // Init Providers
         $this->instanceRegisterProviders();
