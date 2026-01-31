@@ -36,3 +36,5 @@ wp-config.php
 # Packed files
 *.zip
 *.tar.gz
+
+/bootstrap/cache/
