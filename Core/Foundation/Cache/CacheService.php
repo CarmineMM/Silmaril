@@ -1,18 +1,14 @@
 <?php
 
-namespace Silmaril\Core\Cache;
+namespace Silmaril\Core\Foundation\Cache;
 
 use Illuminate\Support\Arr;
+use Silmaril\Core\Foundation\RoadTracer;
 use Silmaril\Core\Foundation\Theme;
 use Silmaril\Core\Helpers\Filesystem;
 
 class CacheService
 {
-    /**
-     * Instancia del tema
-     */
-    protected Theme $theme;
-
     /**
      * Configuración de cache
      */
@@ -31,15 +27,25 @@ class CacheService
     /**
      * Constructor
      */
-    public function __construct(Theme $theme)
-    {
-        $this->theme = $theme;
+    public function __construct(
+        public Theme $theme
+    ) {
         $this->config = $theme->config('cache', []);
         $this->cachePath = $this->config['path'] ?? Filesystem::folder('bootstrap/cache');
-        $this->manifestFile = Filesystem::folder('bootstrap/cache/cache.manifest');
+        $this->manifestFile = $this->cachePath . DIRECTORY_SEPARATOR . 'manifest';
 
         // Crear directorio de cache si no existe
         Filesystem::createFolderIfNoExists($this->cachePath);
+
+        RoadTracer::stroke([
+            'file' => Filesystem::phpFile('Core/Foundation/Cache/CacheService'),
+            'line' => 35,
+            'function' => '__construct',
+            'class' => CacheService::class,
+            'method' => CacheService::class . '->__construct()',
+            'object' => CacheService::class,
+            'args' => [],
+        ]);
     }
 
     /**

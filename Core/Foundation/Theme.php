@@ -4,6 +4,7 @@ namespace Silmaril\Core\Foundation;
 
 use Exception;
 use Illuminate\Support\Arr;
+use Silmaril\Core\Foundation\Cache\CacheService;
 use Silmaril\Core\Foundation\RoadTracer;
 use Silmaril\Core\Helpers\Filesystem;
 
@@ -57,13 +58,25 @@ class Theme
     private string $configPath = 'App/config';
 
     /**
+     * Cache service
+     * 
+     * @var 
+     */
+    protected CacheService $cacheService;
+
+    /**
      * Constructor privado (Singleton)
      */
     private function __construct()
     {
         $this->loadConstants();
-        $this->loadThemeFeatures();
+
+        $this->loadThemeInWordpress();
+
+        $this->cacheService = new CacheService($this);
+
         $this->loadConfiguration();
+
         $this->registerProviders();
 
         RoadTracer::stroke([
@@ -102,11 +115,11 @@ class Theme
     }
 
     /**
-     * Theme features
+     * Carga cosas asociadas al tema que relacionan con Wordpress
      * 
      * @return void
      */
-    public function loadThemeFeatures(): void
+    public function loadThemeInWordpress(): void
     {
         $this->version = \wp_get_theme()->get('Version');
     }

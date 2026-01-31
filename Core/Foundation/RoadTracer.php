@@ -111,6 +111,7 @@ class RoadTracer
             $tracer['type'] = match (true) {
                 \str_contains($tracer['class'], 'Provider') => 'ServiceProvider',
                 \str_contains($tracer['class'], 'Service') => 'Service',
+                \str_contains($tracer['class'], 'Cache') => 'Cache',
                 \str_contains($tracer['class'], 'Foundation') => 'Foundation',
                 default => 'App',
             };
