@@ -19,7 +19,7 @@ class CacheService
     /**
      * Path de cache
      */
-    protected string $cachePath;
+    protected ?string $cachePath = null;
 
     /**
      * Manifest file
@@ -32,6 +32,7 @@ class CacheService
     public function __construct(
         public Theme &$theme
     ) {
+        // TODO: Si o si hay que consultar la base de datos
         $this->loadConfig();
 
         RoadTracer::stroke([
@@ -67,8 +68,8 @@ class CacheService
     public function loadConfig(): void
     {
         $this->config = $this->theme->config('cache', []);
-        $this->cachePath = $this->config['path'] ?? Filesystem::folder('bootstrap/cache');
-        $this->manifestFile = $this->cachePath . DIRECTORY_SEPARATOR . 'manifest';
+        $this->cachePath ??= $this->config['path'] ?? Filesystem::folder('bootstrap/cache');
+        $this->manifestFile = $this->cachePath . DIRECTORY_SEPARATOR . 'manifest.json';
 
         // Crear directorio de cache si no existe
         if ($this->config('enabled', false)) {
@@ -177,6 +178,12 @@ class CacheService
         return false;
     }
 
+    /**
+     * Nombre de los generadores posibles
+     * 
+     * @param string $component
+     * @return array<array|string>
+     */
     private function namesGenerator(string $component): array
     {
         $component = Str::of($component)

@@ -59,10 +59,8 @@ class Theme
 
     /**
      * Cache service
-     * 
-     * @var 
      */
-    protected CacheService $cacheService;
+    protected ?CacheService $cacheService = null;
 
     /**
      * Constructor privado (Singleton)
@@ -155,7 +153,7 @@ class Theme
      */
     private function loadConfiguration(): void
     {
-        if ($this->cacheService->isEnabled()) {
+        if ($this->cacheService && $this->cacheService->isEnabled()) {
             dd('Seguir aqui cuando sea necesario: loadConfiguration');
         }
 
