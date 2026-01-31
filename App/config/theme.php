@@ -53,7 +53,7 @@ return [
         |
         */
         'comments' => [
-            'disable_globally' => false,              // Deshabilitar completamente (Todas las features entran en 'true')
+            'disable_globally' => true,              // Deshabilitar completamente (Todas las features entran en 'true')
             'disable_front_theme' => false,           // Deshabilitar completamente los comentarios (frontend + backend)
             'remove_admin_menu' => false,             // Remover del menú admin
             'remove_admin_columns' => false,          // Remover columnas al guardar posts
@@ -72,7 +72,7 @@ return [
         |
         */
         'categories' => [
-            'disable_globally' => false,             // Deshabilitar completamente (Todas las features entran en 'true')
+            'disable_globally' => true,             // Deshabilitar completamente (Todas las features entran en 'true')
             'disable_for_posts' => false,            // Deshabilitar para posts
             'remove_admin_menu' => false,            // Remover del menú admin
             'remove_admin_meta_box' => false,        // Remover meta box
@@ -90,7 +90,7 @@ return [
         |
         */
         'tags' => [
-            'disable_globally' => false,              // Deshabilitar completamente (Todas las features entran en 'true')
+            'disable_globally' => true,              // Deshabilitar completamente (Todas las features entran en 'true')
             'disable_for_posts' => false,             // Deshabilitar para posts
             'remove_admin_menu' => false,             // Remover del menú admin
             'remove_admin_meta_box' => false,         // Remover meta box
@@ -105,7 +105,7 @@ return [
         |--------------------------------------------------------------------------
         */
         'additional' => [
-            'remove_pingbacks' => false,             // Remover pingbacks
+            'remove_pingbacks' => true,             // Remover pingbacks
             'remove_author_archives' => false,       // Remover archives de autores
             'remove_date_archives' => false,         // Remover archives por fecha
             'remove_trackbacks' => false,            // Remover trackbacks
@@ -117,9 +117,9 @@ return [
         |--------------------------------------------------------------------------
         */
         'editor' => [
-            'disabled_gutenberg' => false,          // Deshabilitar Gutenberg globalmente
+            'disabled_gutenberg' => true,          // Deshabilitar Gutenberg globalmente
             'disabled_gutenberg_for' => [],         // Deshabilitar Gutenberg para post types (Si esta vacio, se desabilita para todos).
-            'disabled_gutenberg_widgets' => false,  // Deshabilitar Gutenberg en widgets
+            'disabled_gutenberg_widgets' => true,  // Deshabilitar Gutenberg en widgets
             'use_classic_editor_plugin' => false   // true = requiere plugin instalado: https://wordpress.org/plugins/classic-editor/
         ],
     ],

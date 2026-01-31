@@ -20,7 +20,7 @@ return [
     | Directorio donde se almacenarán los archivos de cache
     |
     */
-    'path' => \Silmaril\Core\Helpers\Filesystem::folder('bootstrap/cache'),
+    'path' => 'bootstrap/cache',
 
     /*
     |--------------------------------------------------------------------------

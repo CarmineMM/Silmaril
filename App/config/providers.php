@@ -13,6 +13,7 @@ return [
         \Silmaril\Core\Providers\PostTypeServiceProvider::class,
         \Silmaril\Core\Providers\FeaturesServiceProvider::class,
         \Silmaril\Core\Providers\HookServiceProvider::class,
+        \Silmaril\Core\Providers\RestApiServiceProvider::class,
         \Silmaril\Core\Providers\FilterServiceProvider::class,
     ],
 
