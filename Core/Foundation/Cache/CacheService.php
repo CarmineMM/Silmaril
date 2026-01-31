@@ -28,14 +28,9 @@ class CacheService
      * Constructor
      */
     public function __construct(
-        public Theme $theme
+        public Theme &$theme
     ) {
-        $this->config = $theme->config('cache', []);
-        $this->cachePath = $this->config['path'] ?? Filesystem::folder('bootstrap/cache');
-        $this->manifestFile = $this->cachePath . DIRECTORY_SEPARATOR . 'manifest';
-
-        // Crear directorio de cache si no existe
-        Filesystem::createFolderIfNoExists($this->cachePath);
+        $this->loadConfig();
 
         RoadTracer::stroke([
             'file' => Filesystem::phpFile('Core/Foundation/Cache/CacheService'),
@@ -49,11 +44,45 @@ class CacheService
     }
 
     /**
+     * Get config value
+     * 
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     */
+    public function config(?string $key = null, mixed $default = null): mixed
+    {
+        if ($key === null) {
+            return $this->config;
+        }
+
+        return Arr::get($this->config, $key, $default);
+    }
+
+    /**
+     * Reload config
+     */
+    public function loadConfig(): void
+    {
+        $this->config = $this->theme->config('cache', []);
+
+        if (!$this->config('enabled', false)) {
+            return;
+        }
+
+        $this->cachePath = $this->config['path'] ?? Filesystem::folder('bootstrap/cache');
+        $this->manifestFile = $this->cachePath . DIRECTORY_SEPARATOR . 'manifest';
+
+        // Crear directorio de cache si no existe
+        Filesystem::createFolderIfNoExists($this->cachePath);
+    }
+
+    /**
      * Verificar si cache está habilitada
      */
     public function isEnabled(): bool
     {
-        return Arr::get($this->config, 'enabled', false);
+        return $this->config('enabled', false);
     }
 
     /**

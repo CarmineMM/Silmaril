@@ -155,6 +155,10 @@ class Theme
      */
     private function loadConfiguration(): void
     {
+        if ($this->cacheService->isEnabled()) {
+            dd('Seguir aqui cuando sea necesario: loadConfiguration');
+        }
+
         $files = Filesystem::getFilesInFolder($this->configPath, 'php');
 
         foreach ($files as $filePath) {
@@ -181,6 +185,10 @@ class Theme
      */
     public function loadDeferredConfig(): void
     {
+        if ($this->cacheService->isEnabled()) {
+            dd('Seguir aqui cuando sea necesario: loadDeferredConfig');
+        }
+
         $files = Filesystem::getFilesInFolder($this->configPath, 'php');
 
         foreach ($files as $filePath) {
@@ -247,6 +255,10 @@ class Theme
      */
     private function registerProviders(): void
     {
+        if ($this->cacheService->isEnabled()) {
+            dd('Seguir aqui cuando sea necesario: registerProviders');
+        }
+
         $providersConfig = $this->config('providers', []);
 
         if (isset($providersConfig['auto'])) {
@@ -270,6 +282,11 @@ class Theme
      */
     public function bootstrap(): void
     {
+        if (!$this->cacheService->isEnabled()) {
+            $this->cacheService->loadConfig();
+        }
+        dd($this->cacheService->config());
+
         // Init Providers
         $this->instanceRegisterProviders();
 

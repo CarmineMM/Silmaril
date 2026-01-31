@@ -69,8 +69,8 @@ class Filesystem
      */
     public static function createFolderIfNoExists(string $folder): void
     {
-        if (!is_dir($folder)) {
-            wp_mkdir_p($folder);
+        if (!\is_dir($folder)) {
+            \wp_mkdir_p($folder);
         }
     }
 }
