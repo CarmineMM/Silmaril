@@ -117,7 +117,7 @@ Silmaril organiza todo en service providers con un ciclo de vida explícito:
 
 // 1. Configuración centralizada (App/config/providers.php)
 return [
-    'auto_boot' => [
+    'auto' => [
         \Silmaril\Core\Providers\SupportsServiceProvider::class,
         \Silmaril\Core\Providers\ThemeServiceProvider::class,
         \Silmaril\Core\Providers\AssetsServiceProvider::class,
@@ -340,7 +340,7 @@ public function boot()
 Los providers se cargan en el orden especificado en `App/config/providers.php`:
 
 ```php
-'auto_boot' => [
+'auto' => [
     \Silmaril\Core\Providers\SupportsServiceProvider::class,        // 1
     \Silmaril\Core\Providers\ThemeServiceProvider::class,           // 2
     \Silmaril\Core\Providers\AssetsServiceProvider::class,          // 3
@@ -390,7 +390,7 @@ Define qué service providers se cargan y en qué orden.
 <?php
 
 return [
-    'auto_boot' => [
+    'auto' => [
         \Silmaril\Core\Providers\SupportsServiceProvider::class,
         \Silmaril\Core\Providers\ThemeServiceProvider::class,
         \Silmaril\Core\Providers\AssetsServiceProvider::class,
@@ -482,15 +482,15 @@ Define acciones personalizadas que se registran automáticamente.
 <?php
 
 return [
-    // Formato: 'hook_name' => ['class', 'method'] o callable
+    // Formato: 'hook_name' => ['priority' => int, 'callback' => [Class::class, 'method']]
     'wp_head' => [
-        ['priority' => 1, 'callback' => \Silmaril\Core\Hooks\HtmlContentHook::class . '@addHeadContent'],
+        ['priority' => 1, 'callback' => [\Silmaril\Core\Hooks\HtmlContentHook::class, 'addHeadContent']],
     ],
     'init' => [
-        ['priority' => 10, 'callback' => \Silmaril\App\Hooks\RemoveActionsHook::class . '@initActions'],
+        ['priority' => 10, 'callback' => [\Silmaril\App\Hooks\RemoveActionsHook::class, 'initActions']],
     ],
     'rest_api_init' => [
-        ['priority' => 10, 'callback' => \Silmaril\App\Hooks\RestApiInitHook::class . '@getFeatureMedia'],
+        ['priority' => 10, 'callback' => [\Silmaril\App\Hooks\RestApiInitHook::class, 'getFeatureMedia']],
     ],
 ];
 ```
@@ -822,7 +822,7 @@ class YourProvider extends ServiceProvider
 2. Registrarlo en `App/config/providers.php`:
 
 ```php
-'auto_boot' => [
+'auto' => [
     // ... providers existentes
     \Silmaril\App\Providers\YourProvider::class,
 ],
@@ -861,19 +861,81 @@ class YourService extends Service
 
 ### Acceder a Servicios
 
-Existen varias formas de acceder a servicios registrados:
+Existen dos formas de acceder a servicios registrados. **Se recomienda usar `callServiceMethod()`** porque incluye ciclo de vida automático de before/after:
 
 ```php
-// Forma 1: Obtener la instancia del servicio
-$service = theme()->getService('your_service');
-$result = $service->doSomething();
-
-// Forma 2: Llamar método directamente sin obtener instancia
+// ✅ RECOMENDADO: Llamar método con ciclo de vida antes/después
 $result = theme()->callServiceMethod('your_service', 'doSomething');
 
-// Forma 3: Con argumentos
+// ✅ Con argumentos
 $result = theme()->callServiceMethod('your_service', 'methodName', $arg1, $arg2);
+
+// ❌ NO RECOMENDADO: Obtener instancia directa (sin ciclo de vida)
+$service = theme()->getService('your_service');
+$result = $service->doSomething();
 ```
+
+#### Ciclo de Vida de Métodos de Servicios
+
+Cuando usas `callServiceMethod()`, el sistema ejecuta automáticamente tres fases:
+
+```php
+// Para un método llamado yourMethod():
+
+1. beforeYourMethod()   // Se ejecuta ANTES
+2. yourMethod()         // Se ejecuta el método principal
+3. afterYourMethod()    // Se ejecuta DESPUÉS
+```
+
+**Ejemplo práctico:**
+
+```php
+<?php
+
+namespace Silmaril\App\Services;
+
+use Silmaril\Core\Foundation\Service;
+
+class DataService extends Service
+{
+    public function beforeFetchData(int $id)
+    {
+        // Se ejecuta ANTES de fetchData()
+        // Útil para validaciones, logging, etc.
+        error_log("Fetching data for ID: {$id}");
+    }
+
+    public function fetchData(int $id): array
+    {
+        // Método principal
+        return ['id' => $id, 'data' => 'content'];
+    }
+
+    public function afterFetchData(array $result, int $id)
+    {
+        // Se ejecuta DESPUÉS de fetchData()
+        // Recibe el resultado como primer parámetro
+        // Útil para post-procesamiento, caché, etc.
+        error_log("Data fetched for ID: {$id}, result: " . json_encode($result));
+    }
+}
+```
+
+**Usarlo:**
+
+```php
+// En un template o controller
+$result = theme()->callServiceMethod('data_service', 'fetchData', 123);
+
+// Esto ejecuta automáticamente:
+// 1. beforeFetchData(123)
+// 2. fetchData(123) → retorna ['id' => 123, 'data' => 'content']
+// 3. afterFetchData(['id' => 123, 'data' => 'content'], 123)
+```
+
+**Métodos before/after son OPCIONALES:**
+
+Si no defines `beforeYourMethod()` o `afterYourMethod()`, simplemente se omiten y solo se ejecuta el método principal.
 
 ### Servicios Core
 
@@ -1064,12 +1126,13 @@ public function register()
 3. Usarlo desde templates o servicios:
 
 ```php
-// En templates (header.php, single.php, etc.)
+// ✅ RECOMENDADO: Con ciclo de vida before/after
+$data = theme()->callServiceMethod('your_service', 'getData');
+$result = theme()->callServiceMethod('your_service', 'processData', 'hello');
+
+// ❌ NO RECOMENDADO: Acceso directo sin ciclo de vida
 $service = theme()->getService('your_service');
 $data = $service->getData();
-
-// Acceso directo sin obtener instancia
-$result = theme()->callServiceMethod('your_service', 'processData', 'hello');
 ```
 
 ---
@@ -1314,7 +1377,7 @@ En Silmaril, los hooks se centralizan en configuración:
 // ✅ Silmaril (App/config/hooks.php)
 return [
     'wp_head' => [
-        ['priority' => 1, 'callback' => \Silmaril\Core\Hooks\HtmlContentHook::class . '@addHeadContent'],
+        ['priority' => 1, 'callback' => [\\Silmaril\\Core\\Hooks\\HtmlContentHook::class, 'addHeadContent']],
     ],
 ];
 ```
@@ -1329,13 +1392,13 @@ Los hooks definidos en `App/config/hooks.php` se registran automáticamente por 
 
 return [
     'wp_head' => [
-        ['priority' => 1, 'callback' => \Silmaril\Core\Hooks\HtmlContentHook::class . '@addHeadContent'],
+        ['priority' => 1, 'callback' => [\\Silmaril\\Core\\Hooks\\HtmlContentHook::class, 'addHeadContent']],
     ],
     'init' => [
-        ['priority' => 10, 'callback' => \Silmaril\App\Hooks\RemoveActionsHook::class . '@initActions'],
+        ['priority' => 10, 'callback' => [\\Silmaril\\App\\Hooks\\RemoveActionsHook::class, 'initActions']],
     ],
     'rest_api_init' => [
-        ['priority' => 10, 'callback' => \Silmaril\App\Hooks\RestApiInitHook::class . '@getFeatureMedia'],
+        ['priority' => 10, 'callback' => [\\Silmaril\\App\\Hooks\\RestApiInitHook::class, 'getFeatureMedia']],
     ],
 ];
 ```
@@ -1413,10 +1476,10 @@ class YourHook
 ```php
 return [
     'your_custom_hook' => [
-        ['priority' => 10, 'callback' => \Silmaril\App\Hooks\YourHook::class . '@doSomething'],
+        ['priority' => 10, 'callback' => [\Silmaril\App\Hooks\YourHook::class, 'doSomething']],
     ],
     'the_content' => [
-        ['priority' => 20, 'callback' => \Silmaril\App\Hooks\YourHook::class . '@doSomethingElse'],
+        ['priority' => 20, 'callback' => [\Silmaril\App\Hooks\YourHook::class, 'doSomethingElse']],
     ],
 ];
 ```
@@ -1436,7 +1499,7 @@ return [
         }],
     ],
     'the_content' => [
-        ['priority' => 20, 'callback' => \Silmaril\Core\Filters\PageContentFilter::class . '@filter'],
+        ['priority' => 20, 'callback' => [\Silmaril\Core\Filters\PageContentFilter::class, 'filter']],
     ],
 ];
 ```
@@ -1469,10 +1532,10 @@ Registrar en `App/config/filters.php`:
 ```php
 return [
     'the_content' => [
-        ['priority' => 10, 'callback' => \Silmaril\App\Filters\CustomFilter::class . '@filterContent'],
+        ['priority' => 10, 'callback' => [\Silmaril\App\Filters\CustomFilter::class, 'filterContent']],
     ],
     'the_title' => [
-        ['priority' => 10, 'callback' => \Silmaril\App\Filters\CustomFilter::class . '@filterTitle'],
+        ['priority' => 10, 'callback' => [\Silmaril\App\Filters\CustomFilter::class, 'filterTitle']],
     ],
 ];
 ```
@@ -1685,9 +1748,12 @@ Funciones disponibles en todo el tema:
 // Obtener instancia del Theme
 $theme = theme();
 
-// Acceder a servicios
-$service = theme()->getService('service_name');
+// Acceder a servicios - ✅ RECOMENDADO: Con ciclo de vida
 $result = theme()->callServiceMethod('service_name', 'method', $arg1, $arg2);
+
+// Acceder a servicios - ❌ NO RECOMENDADO: Sin ciclo de vida
+$service = theme()->getService('service_name');
+$result = $service->method($arg1, $arg2);
 
 // Verificar features desactivadas
 $comments_disabled = comments_disabled();
@@ -1698,6 +1764,15 @@ $tags_disabled = tags_disabled();
 $tracer = roadTracer();
 $tracer->trace('event_name', 'description');
 ```
+
+**Nota sobre `callServiceMethod()`:**
+
+Siempre que sea posible, usa `theme()->callServiceMethod()` en lugar de obtener la instancia directamente, porque:
+
+✅ Ejecuta el ciclo de vida before/after automáticamente
+✅ Permite logging y validaciones previas (beforeMethod)
+✅ Permite post-procesamiento (afterMethod)
+✅ Más legible y consistente en todo el código
 
 ### Utilidades de Illuminate/Support
 
@@ -1874,6 +1949,30 @@ theme->bootProviders()
 Tema completamente inicializado
 ```
 
+### Ciclo de Vida de Métodos de Servicios (callServiceMethod)
+
+Cuando usas `theme()->callServiceMethod('service', 'yourMethod', $args)`:
+
+```
+1. beforeYourMethod($args)     // Se ejecuta ANTES (opcional)
+   ↓
+2. yourMethod($args)           // Se ejecuta el método principal
+   ↓
+3. afterYourMethod($result, $args)  // Se ejecuta DESPUÉS (opcional)
+   ↓
+   Retorna: $result
+```
+
+**Ejemplo:**
+```php
+theme()->callServiceMethod('data_service', 'fetchData', 123);
+
+// Ejecuta automáticamente:
+// 1. beforeFetchData(123)      - si existe
+// 2. fetchData(123)            - siempre
+// 3. afterFetchData($result, 123) - si existe
+```
+
 ### Directorios Clave
 
 | Directorio | Propósito | Editable |
@@ -1891,12 +1990,12 @@ Tema completamente inicializado
 
 **P: Mi hook/filtro no se ejecuta**
 - A: Verificar que esté registrado en `App/config/hooks.php` o `App/config/filters.php`
-- A: Revisar que el callback sea válido: `'ClassName@method'` o callable
+- A: Revisar que el callback sea válido: `[ClassName::class, 'method']` o callable
 - A: Confirmar que el provider que lo registra está en `App/config/providers.php`
 
 **P: El servicio no se encuentra**
 - A: Registrarlo en el método `register()` del provider: `$this->theme->registerService(...)`
-- A: Asegurar que el provider esté en `auto_boot` en `providers.php`
+- A: Asegurar que el provider esté en `auto` en `providers.php`
 - A: Usar `theme()->getService('nombre_exacto')`
 
 **P: Cambios en configuración no se aplican**

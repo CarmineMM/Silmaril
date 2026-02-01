@@ -60,3 +60,17 @@ if (!function_exists('roadTracer')) {
         return RoadTracer::getInstance();
     }
 }
+
+if (!function_exists('config')) {
+    /**
+     * Get config
+     *
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     */
+    function config(string $key, mixed $default): mixed
+    {
+        return theme()->config($key, $default);
+    }
+}
