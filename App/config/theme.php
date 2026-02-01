@@ -12,7 +12,7 @@ return [
     | Controla el sistema de road tracer del tema
     |
     */
-    'road_tracer' => WP_DEBUG,
+    'road_tracer' => defined(WP_DEBUG_LOG) ? WP_DEBUG_LOG : WP_DEBUG,
 
     /*
     |--------------------------------------------------------------------------
