@@ -432,6 +432,40 @@ class Theme
     }
 
     /**
+     * Call Service Method, include life cycle
+     * 
+     * @param string $name
+     * @param string $method
+     * @param array $args
+     * @return mixed
+     */
+    public function callServiceMethod(string $name, string $method, ...$args): mixed
+    {
+        $service = $this->getService($name);
+
+        $methodLifecycle = ucfirst($method);
+
+        // 1. Before method
+        $beforeMethod = "before{$methodLifecycle}";
+
+        if (\method_exists($service, $beforeMethod)) {
+            $service->$beforeMethod(...$args);
+        }
+
+        // 2. Call the method
+        $result = $service->$method(...$args);
+
+        // 3. After method
+        $afterMethod = "after{$methodLifecycle}";
+
+        if (\method_exists($service, $afterMethod)) {
+            $service->$afterMethod($result, ...$args);
+        }
+
+        return $result;
+    }
+
+    /**
      * Obtener un servicio
      */
     public function getServices(): array

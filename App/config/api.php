@@ -9,7 +9,17 @@ return [
     | Configuración base para endpoints personalizados
     |
     */
-    'enabled' => true,
+    'enabled' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | API Namespace
+    |--------------------------------------------------------------------------
+    |
+    | Prefijo para los endpoints personalizados
+    |
+    */
+    'namespace' => 'silmaril/v1',
 
     /*
     |--------------------------------------------------------------------------
@@ -20,8 +30,12 @@ return [
     |
     */
     'site_config' => [
+        // Permisos de acceso a los diferentes endpoints, ejecutado durante el add_action()
+        'permission_callback' => fn() => true,
+
         // Información básica
         'basic' => [
+            'enabled' => true,
             'site_title' => true,
             'site_description' => true,
             'site_url' => true,
@@ -34,10 +48,12 @@ return [
             'time_format' => true,
             'start_of_week' => true,
             'posts_per_page' => true,
+            'wordpress_version' => false,
         ],
 
         // Logo y branding
         'branding' => [
+            'enabled' => true,
             'logo' => true,              // Custom logo
             'site_icon' => true,         // Favicon/site icon
             'custom_logo' => true,       // ID del logo
@@ -47,6 +63,7 @@ return [
 
         // SEO y metadata
         'seo' => [
+            'enabled' => true,
             'meta_description' => true,
             'meta_keywords' => false,
             'og_image' => true,          // Open Graph image
@@ -56,47 +73,39 @@ return [
 
         // Contacto
         'contact' => [
-            'phone' => true,
+            'enabled' => false,
             'email' => true,
-            'address' => true,
-            'social_media' => true,      // Redes sociales
         ],
-
-        // Analytics y tracking
-        'analytics' => [
-            'google_analytics' => true,
-            'google_tag_manager' => true,
-            'facebook_pixel' => true,
-            'hotjar' => false,
-        ],
-
-        // Redes sociales
-        'social' => [
-            'facebook' => true,
-            'twitter' => true,
-            'instagram' => true,
-            'linkedin' => true,
-            'youtube' => true,
-            'pinterest' => false,
-            'github' => false,
-        ],
-
-        // Menús registrados
-        'menus' => true,
-
-        // Widgets areas
-        'sidebars' => false,
-
-        // Theme mods (Customizer)
-        'theme_mods' => true,
 
         // Permalinks
         'permalinks' => [
+            'enabled' => true,
             'structure' => true,
             'category_base' => true,
             'tag_base' => true,
         ],
+
+        // Theme mods (Customizer)
+        'theme_mods' => [
+            'enabled' => false,
+        ],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Site Menu Endpoint
+    |--------------------------------------------------------------------------
+    |
+    | Qué datos incluir en el endpoint de menús del sitio
+    |
+    */
+    'site_menu' => [
+        'enabled' => true,
+        'permission_callback' => fn() => true,
+    ],
+
+    // // Widgets areas
+    // 'sidebars' => false,
 
     /*
     |--------------------------------------------------------------------------

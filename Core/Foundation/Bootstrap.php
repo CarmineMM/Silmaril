@@ -4,6 +4,7 @@ namespace Silmaril\Core\Foundation;
 
 use Silmaril\Core\Helpers\Filesystem;
 use CarmineMM\UnitsConversion\Conversion\TimeConversion;
+use Silmaril\Core\Contracts\ControllerInterface;
 
 class Bootstrap
 {
@@ -73,5 +74,31 @@ class Bootstrap
             'object' => Bootstrap::class,
             'args' => [],
         ]);
+    }
+
+    /**
+     * Instance controller
+     * 
+     * @param string $controller
+     * @param Theme $theme
+     * @return object
+     */
+    public static function controller(string $controller, Theme $theme): ControllerInterface
+    {
+        $instance = new $controller($theme);
+
+        $instance->init();
+
+        RoadTracer::stroke([
+            'file' => Filesystem::phpFile('Core/Foundation/Bootstrap'),
+            'line' => 79,
+            'function' => 'controller',
+            'class' => $instance::class,
+            'method' => $instance::class . '->init()',
+            'object' => $instance::class,
+            'args' => [],
+        ]);
+
+        return $instance;
     }
 }
